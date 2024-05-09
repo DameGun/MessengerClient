@@ -6,6 +6,20 @@
     "module": "ESNext",
     "skipLibCheck": true,
 
+    /* Path alias */
+    "baseUrl": "./",
+    "paths": {
+      "@customTypes/*": ["src/types/*"],
+      "@services/*": ["src/services/*"],
+      "@pages/*": ["src/pages/*"],
+      "@router/*": ["src/router/*"],
+      "@constants/*": ["src/constants/*"],
+      "@components/*": ["src/components/*"],
+      "@state/*": ["src/services/redux/*"],
+      "@hooks/*": ["src/hooks/*"],
+      "@helpers/*": ["src/helpers/*"]
+    },
+
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
