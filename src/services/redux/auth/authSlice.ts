@@ -1,6 +1,8 @@
 import { User } from "@customTypes/user";
+import { jwtDecode } from "jwt-decode";
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "@state/store";
+import { DecodedToken } from "@customTypes/authentication";
 
 export interface AuthState {
     user: User | null,
@@ -18,6 +20,13 @@ const authSlice = createSlice({
     reducers: {
         setCredentials: (state, action) => {
             const { accessToken } = action.payload;
+            const { user_id, email } = jwtDecode<DecodedToken>(accessToken);
+            state.user = {
+                id: user_id,
+                userName: email,
+                bio: "",
+                image: ""
+            }
             state.token = accessToken;
         },
         logout: (state) => {

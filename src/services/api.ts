@@ -20,24 +20,23 @@ const baseQuery = fetchBaseQuery({
 
 /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 const baseQueryWithReauth = async (args: any, api: BaseQueryApi, extraOptions: object) => {
+    // console.log('args:', args)
     let result = await baseQuery(args, api, extraOptions);
+    
+    if (result.error && result.error.status == 401) {
+        console.log('sending refresh token')
+        // send refresh token to get new access token
+        const refreshResult = await baseQuery('/token/refresh', api, extraOptions);
+        console.log(refreshResult);
 
-    if (result?.error && 'originalStatus' in result.error) {
-        if (result.error.originalStatus === 403) {
-            console.log('sending refresh token')
-            // send refresh token to get new access token
-            const refreshResult = await baseQuery('/token/refresh', api, extraOptions);
-            console.log(refreshResult);
-
-            if (refreshResult?.data) {
-                // store the new token
-                api.dispatch(setCredentials({ ...refreshResult.data }))
-                // retry the original query with new access token
-                result = await baseQuery(args, api, extraOptions);
-            }
-            else {
-                api.dispatch(logout())
-            }
+        if (refreshResult?.data) {
+            // store the new token
+            api.dispatch(setCredentials({ ...refreshResult.data }))
+            // retry the original query with new access token
+            result = await baseQuery(args, api, extraOptions);
+        }
+        else {
+            api.dispatch(logout())
         }
     }
 

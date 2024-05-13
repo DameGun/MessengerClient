@@ -7,6 +7,7 @@ export default function RequireAuth() {
     const location = useLocation();
 
     return (
+        // temporary solution
         token
             ? <Outlet/>
             : <Navigate to='/login' state={{ from: location }} replace />

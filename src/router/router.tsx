@@ -1,8 +1,9 @@
 import { createBrowserRouter } from 'react-router-dom';
 import LoginPage from '@pages/Login';
-import App from '@pages/Layout';
 import RequireAuth from '@pages/RequireAuth';
 import RegisterPage from '@pages/Register';
+import Layout from '@pages/Layout';
+import Chat from '@pages/Chat';
 
 export const router = createBrowserRouter([
     {
@@ -10,17 +11,23 @@ export const router = createBrowserRouter([
         element: <RequireAuth />,
         children: [
             {
-                path: "",
-                element: <App />
+                path: '',
+                element: <Layout />,
+                children: [
+                    {
+                        index: true,
+                        element: <Chat/>
+                    }
+                ]
             }
         ]
     },
     {
-        path: 'login',
+        path: '/login',
         element: <LoginPage />
     },
     {
-        path: 'register',
+        path: '/register',
         element: <RegisterPage />
     }
 ])

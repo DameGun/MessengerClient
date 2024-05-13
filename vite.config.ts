@@ -11,7 +11,7 @@ export default defineConfig({
       '@services': path.resolve(__dirname, './src/services'),
       '@pages': path.resolve(__dirname, './src/pages'),
       '@router': path.resolve(__dirname, './src/router'),
-      '@constants': path.resolve(__dirname, './src/constants'),
+      '@styles': path.resolve(__dirname, './src/styles'),
       '@components': path.resolve(__dirname, './src/components'),
       '@state': path.resolve(__dirname, './src/services/redux'),
       '@hooks': path.resolve(__dirname, './src/hooks'),

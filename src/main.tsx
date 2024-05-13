@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client'
 import { RouterProvider } from 'react-router-dom'
 import { router } from '@router/router'
 import { ChakraProvider, ColorModeScript } from '@chakra-ui/react'
-import theme from '@constants/theme'
+import theme from '@styles/theme'
 import './main.css';
 import { Provider } from 'react-redux'
 import { store } from '@state/store'
