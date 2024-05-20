@@ -16,6 +16,7 @@ export const router = createBrowserRouter([
                 children: [
                     {
                         index: true,
+                        path: 'chat/:chatId',
                         element: <Chat/>
                     }
                 ]

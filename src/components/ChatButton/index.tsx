@@ -1,34 +1,46 @@
 import {
   Avatar,
   Text,
-  LinkBox,
   LinkOverlay,
   Skeleton,
   VStack,
   HStack,
   MenuItem,
+  useStyleConfig,
+  Box,
 } from "@chakra-ui/react";
 import ContextMenu from "@components/ContextMenu";
 import { Chat } from "@customTypes/chat";
 import { ChatMessage } from "@customTypes/chatMessage";
 import { useAppSelector } from "@hooks/index";
-import { selectCurrentUser } from "@services/redux/auth/authSlice";
+import { selectCurrentUserId } from "@services/redux/auth/authSlice";
 import { useGetChatMessagesQuery } from "@state/chats/chatsApiSlice";
-import React from "react";
+import React, { MouseEventHandler } from "react";
 import { HiOutlineTrash } from "react-icons/hi";
 
-export default function ChatButton({ chatItem }: { chatItem: Chat }) {
-  const user = useAppSelector(selectCurrentUser);
+interface ChatButtonProps {
+  chatItem: Chat;
+  variant: string;
+  onClick: MouseEventHandler;
+}
+
+export default function ChatButton({
+  chatItem,
+  variant,
+  onClick,
+}: ChatButtonProps) {
+  const userId = useAppSelector(selectCurrentUserId);
   const { data, isLoading, isSuccess, isError } = useGetChatMessagesQuery(
     chatItem.Id
   );
+
+  const styles = useStyleConfig("ChatButton", { variant });
 
   const lastMessage = () => {
     if (isSuccess) {
       if (data.length > 0) {
         const message: ChatMessage = data[0];
-        const messageSender: string =
-          user?.id == message.accountId ? "You:" : "";
+        const messageSender: string = userId == message.accountId ? "You:" : "";
         return (
           <React.Fragment>
             {messageSender && (
@@ -74,20 +86,13 @@ export default function ChatButton({ chatItem }: { chatItem: Chat }) {
 
   return (
     <Skeleton isLoaded={!isLoading}>
-      <LinkBox
-        borderRadius="10"
-        _hover={{ backgroundColor: "gray.200" }}
-        minW={150}
-      >
-        <ContextMenu
-          TriggerComponent={<ChatOverlay />}
-          onLayoutClick={() => console.log("click")}
-        >
+      <Box __css={styles} onClick={onClick}>
+        <ContextMenu TriggerComponent={<ChatOverlay />}>
           <MenuItem color="red.600" icon={<HiOutlineTrash size={20} />}>
             Delete chat
           </MenuItem>
         </ContextMenu>
-      </LinkBox>
+      </Box>
     </Skeleton>
   );
 }

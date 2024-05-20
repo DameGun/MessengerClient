@@ -1,17 +1,21 @@
-import { User } from "@customTypes/user";
 import { jwtDecode } from "jwt-decode";
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "@state/store";
 import { DecodedToken } from "@customTypes/authentication";
+import { deleteCookie, setCookie } from "@helpers/cookies";
+
+const TOKEN_AGE = import.meta.env.VITE_TOKEN_AGE;
 
 export interface AuthState {
-    user: User | null,
+    userId: string | null,
     token: string | null,
+    isAuthorized: boolean
 }
 
 const initialState: AuthState = {
-    user: null,
-    token: null
+    userId: null,
+    token: null,
+    isAuthorized: false
 }
 
 const authSlice = createSlice({
@@ -19,26 +23,48 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         setCredentials: (state, action) => {
-            const { accessToken } = action.payload;
-            const { user_id, email } = jwtDecode<DecodedToken>(accessToken);
-            state.user = {
-                id: user_id,
-                userName: email,
-                bio: "",
-                image: ""
+            const { accessToken, refreshToken } = action.payload;
+            const { userId } = jwtDecode<DecodedToken>(accessToken);
+
+            const oldUserId = localStorage.getItem('userId');
+            if (oldUserId !== userId) {
+                localStorage.setItem('userId', userId);
             }
+
+            if(refreshToken) {
+                setCookie('refreshToken', refreshToken, {
+                    path: '/',
+                    secure: true,
+                    "max-age": TOKEN_AGE
+                })
+                setCookie('accessToken', accessToken, {
+                    path: '/',
+                    secure: true,
+                    "max-age": 60 * 5
+                })
+            }
+
+            state.userId = userId;
             state.token = accessToken;
+            state.isAuthorized = true;
         },
         logout: (state) => {
-            state.user = null;
+            state.userId = null;
             state.token = null;
+            state.isAuthorized = false;
+
+            deleteCookie('refreshToken');
+            deleteCookie('accessToken');
+
+            localStorage.removeItem('userId');
         }
     }
 })
 
 export const { setCredentials, logout } = authSlice.actions;
 
-export const selectCurrentUser = (state: RootState) => state.auth.user;
+export const selectCurrentUserId = (state: RootState) => state.auth.userId;
+export const selectIsAuthorized = (state: RootState) => state.auth.isAuthorized;
 export const selectCurrentToken = (state: RootState) => state.auth.token;
 
 export default authSlice.reducer;

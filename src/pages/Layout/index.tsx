@@ -1,7 +1,10 @@
-import { Box } from "@chakra-ui/react";
+import { Box, useColorMode } from "@chakra-ui/react";
 import SideBar from "@components/SideBar";
+import { useSignalRConnection } from "@hooks/singalr";
 import { useState, MouseEvent } from "react";
 import { Outlet } from "react-router-dom";
+import chatBgDark from "@assets/chat-bg-dark.jpg";
+import chatBgLight from "@assets/chat-bg-light.jpg";
 
 const MIN_SIDEBAR_WIDTH = 300;
 const MAX_SIDEBAR_WIDTH = 700;
@@ -10,11 +13,18 @@ export default function Layout() {
   const [sidebarWidth, setSidebarWidth] = useState(MIN_SIDEBAR_WIDTH);
   const [dragActive, setDragActive] = useState(false);
 
+  const { colorMode } = useColorMode();
+
+  useSignalRConnection();
+
   function handleMouseMove(event: MouseEvent) {
     if (dragActive) {
       event.preventDefault();
       const delta = event.clientX - sidebarWidth;
-      const newWidth = Math.max(MIN_SIDEBAR_WIDTH, Math.min(MAX_SIDEBAR_WIDTH, sidebarWidth + delta));
+      const newWidth = Math.max(
+        MIN_SIDEBAR_WIDTH,
+        Math.min(MAX_SIDEBAR_WIDTH, sidebarWidth + delta)
+      );
 
       setSidebarWidth(newWidth);
     }
@@ -42,23 +52,16 @@ export default function Layout() {
       </Box>
       <Box
         onMouseDown={handleMouseDown}
-        h="100%"
         position="relative"
         cursor="ew-resize"
-        borderInline="solid"
-        borderInlineStartWidth={1}
-        borderInlineEndColor='white'
-        borderInlineStartColor='white'
-        borderInlineEndWidth={5}
-        marginRight={2}
-        bg="gray.300"
         width={2}
-        _hover={{
-          borderInlineColor: "gray.500",
-          bg: "gray.500",
-        }}
+        borderRightWidth={1}
       />
-      <Box flexGrow={1}>
+      <Box
+        flexGrow={1}
+        bgImage={colorMode == "light" ? chatBgLight : chatBgDark}
+        bgSize="cover"
+      >
         <Outlet />
       </Box>
     </Box>

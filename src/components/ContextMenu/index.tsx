@@ -3,7 +3,6 @@ import { MouseEvent, useState } from "react";
 
 interface ContextMenuProps {
     TriggerComponent: React.ReactNode,
-    onLayoutClick: React.MouseEventHandler,
     children: React.ReactNode
 }
 
@@ -22,8 +21,8 @@ export default function ContextMenu(props: ContextMenuProps) {
     ))
 
     return (
-        <Menu isOpen={openMenu} onClose={() => setOpenMenu(!openMenu)}>
-            <Trigger w='100%' onClick={props.onLayoutClick}>
+        <Menu isOpen={openMenu} onClose={() => setOpenMenu(!openMenu)} autoSelect={false}>
+            <Trigger w='100%'>
                 {props.TriggerComponent}
             </Trigger>
             <MenuList>

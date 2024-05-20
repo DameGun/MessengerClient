@@ -14,9 +14,9 @@ type Tokens = {
 }
 
 type DecodedToken = {
-    email: string,
-    role: string,
-    user_id: string,
+    userEmail: string,
+    userRole: string,
+    userId: string,
     exp: number
 }
 

@@ -14,4 +14,4 @@ const baseStyle = definePartsStyle({
     }
 })
 
-export const menuTheme = defineMultiStyleConfig({ baseStyle });
+export const menuStyle = defineMultiStyleConfig({ baseStyle });

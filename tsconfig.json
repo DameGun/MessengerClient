@@ -9,6 +9,7 @@
     /* Path alias */
     "baseUrl": "./",
     "paths": {
+      "@assets/*": ["src/assets/*"],
       "@customTypes/*": ["src/types/*"],
       "@services/*": ["src/services/*"],
       "@pages/*": ["src/pages/*"],

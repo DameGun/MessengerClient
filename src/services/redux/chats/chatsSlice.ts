@@ -1,13 +1,12 @@
 import { Chat } from "@customTypes/chat";
 import { createSlice } from "@reduxjs/toolkit";
+import { RootState } from "@state/store";
 
 export interface ChatsState {
-    chats: Chat[],
     currentChat: Chat | null
 }
 
 const initialState: ChatsState = {
-    chats: [],
     currentChat: null
 }
 
@@ -15,12 +14,22 @@ const chatsSlice = createSlice({
     name: 'chats',
     initialState,
     reducers: {
-        setChats: (state, action) => {
-            state.chats = action.payload;
+        setCurrentChat: (state, action) => {
+            state.currentChat = action.payload;
+        },
+        recoverCurrentChat: (state, action) => {
+            const { chatId, chats } = action.payload;
+            const chat = chats.find((chat: Chat) => chat.Id == chatId);
+            console.log(chats);
+            if (chat) {
+                state.currentChat = chat;
+            }
         }
     }
 })
 
-export const { setChats } = chatsSlice.actions;
+export const { setCurrentChat, recoverCurrentChat } = chatsSlice.actions;
+
+export const selectCurrentChat = (state: RootState) => state.chats.currentChat;
 
 export default chatsSlice.reducer;

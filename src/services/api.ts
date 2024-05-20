@@ -1,6 +1,7 @@
 import { BaseQueryApi, createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { RootState } from '@state/store';
 import { logout, setCredentials } from '@services/redux/auth/authSlice';
+import { getCookie } from '@helpers/cookies';
 
 const API_VERSION = import.meta.env.VITE_API_VERSION;
 const API_URL = import.meta.env.VITE_API_URL_DEV;
@@ -20,19 +21,24 @@ const baseQuery = fetchBaseQuery({
 
 /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 const baseQueryWithReauth = async (args: any, api: BaseQueryApi, extraOptions: object) => {
-    // console.log('args:', args)
     let result = await baseQuery(args, api, extraOptions);
     
     if (result.error && result.error.status == 401) {
-        console.log('sending refresh token')
-        // send refresh token to get new access token
-        const refreshResult = await baseQuery('/token/refresh', api, extraOptions);
-        console.log(refreshResult);
+        const refreshToken = getCookie('refreshToken');
+
+        const fetchArgs = {
+            url: '/token/refresh',
+            method: 'POST',
+            headers: {
+                'Refresh-Token': refreshToken
+            }
+        }
+
+        const refreshResult = await baseQuery(fetchArgs, api, extraOptions);
 
         if (refreshResult?.data) {
-            // store the new token
             api.dispatch(setCredentials({ ...refreshResult.data }))
-            // retry the original query with new access token
+
             result = await baseQuery(args, api, extraOptions);
         }
         else {
