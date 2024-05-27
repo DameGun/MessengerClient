@@ -17,6 +17,7 @@
       "@styles/*": ["src/styles/*"],
       "@components/*": ["src/components/*"],
       "@state/*": ["src/services/redux/*"],
+      "@signalr/*": ["src/services/signalr/*"],
       "@hooks/*": ["src/hooks/*"],
       "@helpers/*": ["src/helpers/*"]
     },

@@ -1,19 +1,23 @@
 import { Box, VStack } from "@chakra-ui/react";
 import ChatHeader from "@components/ChatHeader";
-import { useAppSelector } from "@hooks/index";
+import InfoCaption from "@components/InfoCaption";
+import MessageInputBar from "@components/MessageInputBar";
+import MessagesList from "@components/MessagesList";
+import { useAppSelector } from "@hooks/redux";
 import { selectCurrentChat } from "@services/redux/chats/chatsSlice";
 
 export default function Chat() {
   const currentChat = useAppSelector(selectCurrentChat);
-  
-  return (
-    <VStack
-      alignItems="flex-start"
-      spacing={0}
-      h="100vh"
-    >
-      {currentChat && <ChatHeader currentChat={currentChat} />}
-      <Box w="100%" h="100vh"></Box>
+
+  return currentChat ? (
+    <VStack id="Chat" spacing={0} h="100vh">
+      <ChatHeader currentChat={currentChat} />
+      <MessagesList currentChatId={currentChat.Id} />
+      <MessageInputBar />
     </VStack>
+  ) : (
+    <Box display="flex" h="100%">
+      <InfoCaption caption="Error happened while trying to get chat" />
+    </Box>
   );
 }

@@ -1,7 +1,6 @@
 import {
   Avatar,
   Text,
-  LinkOverlay,
   Skeleton,
   VStack,
   HStack,
@@ -12,9 +11,9 @@ import {
 import ContextMenu from "@components/ContextMenu";
 import { Chat } from "@customTypes/chat";
 import { ChatMessage } from "@customTypes/chatMessage";
-import { useAppSelector } from "@hooks/index";
+import { useAppSelector } from "@hooks/redux";
 import { selectCurrentUserId } from "@services/redux/auth/authSlice";
-import { useGetChatMessagesQuery } from "@state/chats/chatsApiSlice";
+import { useGetChatMessagesQuery } from "@state/messages/messagesApiSlice";
 import React, { MouseEventHandler } from "react";
 import { HiOutlineTrash } from "react-icons/hi";
 
@@ -30,16 +29,18 @@ export default function ChatButton({
   onClick,
 }: ChatButtonProps) {
   const userId = useAppSelector(selectCurrentUserId);
-  const { data, isLoading, isSuccess, isError } = useGetChatMessagesQuery(
-    chatItem.Id
-  );
+  const { data, isLoading, isSuccess, isError } = useGetChatMessagesQuery({
+    chatId: chatItem.Id,
+    page: 1,
+    pageSize: 20,
+  });
 
   const styles = useStyleConfig("ChatButton", { variant });
 
   const lastMessage = () => {
     if (isSuccess) {
-      if (data.length > 0) {
-        const message: ChatMessage = data[0];
+      if (data && data.messages.length > 0) {
+        const message: ChatMessage = data.messages[0];
         const messageSender: string = userId == message.accountId ? "You:" : "";
         return (
           <React.Fragment>
@@ -71,23 +72,21 @@ export default function ChatButton({
   };
 
   const ChatOverlay = () => (
-    <LinkOverlay>
-      <HStack p={2}>
-        <Avatar name={chatItem.Name || ""} src={chatItem.Image} />
-        <VStack spacing={1} alignItems="flex-start" overflow="hidden">
-          <Text fontWeight="bold" fontSize={16} isTruncated>
-            {chatItem.Name || "New chat"}
-          </Text>
-          <HStack spacing={1}>{lastMessage()}</HStack>
-        </VStack>
-      </HStack>
-    </LinkOverlay>
+    <HStack p={2}>
+      <Avatar name={chatItem.Name || ""} src={chatItem.Image} />
+      <VStack spacing={1} alignItems="flex-start" overflow="hidden">
+        <Text fontWeight="bold" fontSize={16} isTruncated>
+          {chatItem.Name || "New chat"}
+        </Text>
+        <HStack spacing={1}>{lastMessage()}</HStack>
+      </VStack>
+    </HStack>
   );
 
   return (
     <Skeleton isLoaded={!isLoading}>
       <Box __css={styles} onClick={onClick}>
-        <ContextMenu TriggerComponent={<ChatOverlay />}>
+        <ContextMenu TriggerComponent={<ChatOverlay />} isCursorLink={true}>
           <MenuItem color="red.600" icon={<HiOutlineTrash size={20} />}>
             Delete chat
           </MenuItem>

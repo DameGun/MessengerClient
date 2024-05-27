@@ -15,9 +15,13 @@ import {
 } from "@chakra-ui/react";
 import { HiOutlineMoon, HiBars3 } from "react-icons/hi2";
 import { HiOutlineSearch } from "react-icons/hi";
+import { TbLogout2 } from "react-icons/tb";
+import { useAppDispatch } from "@hooks/redux";
+import { logout } from "@services/redux/auth/authSlice";
 
 export default function SidebarHeader() {
   const { colorMode, toggleColorMode } = useColorMode();
+  const dispatch = useAppDispatch();
 
   return (
     <Flex mt="5" gap="2">
@@ -33,6 +37,12 @@ export default function SidebarHeader() {
               <Text>Dark mode</Text>
               <Switch id="color-mode" isChecked={colorMode == "dark"} />
             </HStack>
+          </MenuItem>
+          <MenuItem
+            icon={<TbLogout2 size={20} />}
+            onClick={() => dispatch(logout())}
+          >
+            Logout
           </MenuItem>
         </MenuList>
       </Menu>

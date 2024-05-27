@@ -52,5 +52,6 @@ const baseQueryWithReauth = async (args: any, api: BaseQueryApi, extraOptions: o
 export const apiSlice = createApi({
     baseQuery: baseQueryWithReauth,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    tagTypes: ['Messages'],
     endpoints: (builder) => ({})
 })

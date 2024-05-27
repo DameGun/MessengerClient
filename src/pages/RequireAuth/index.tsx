@@ -1,6 +1,6 @@
 import { Center, Spinner, Text } from "@chakra-ui/react";
 import { getCookie } from "@helpers/cookies";
-import { useAppDispatch, useAppSelector } from "@hooks/index";
+import { useAppDispatch, useAppSelector } from "@hooks/redux";
 import { useTokensRefreshMutation } from "@services/redux/auth/authApiSlice";
 import {
   selectCurrentToken,

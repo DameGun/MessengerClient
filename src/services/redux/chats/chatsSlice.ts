@@ -3,11 +3,11 @@ import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "@state/store";
 
 export interface ChatsState {
-    currentChat: Chat | null
+    currentChat: Chat | null,
 }
 
 const initialState: ChatsState = {
-    currentChat: null
+    currentChat: null,
 }
 
 const chatsSlice = createSlice({
@@ -20,7 +20,7 @@ const chatsSlice = createSlice({
         recoverCurrentChat: (state, action) => {
             const { chatId, chats } = action.payload;
             const chat = chats.find((chat: Chat) => chat.Id == chatId);
-            console.log(chats);
+
             if (chat) {
                 state.currentChat = chat;
             }

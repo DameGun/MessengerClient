@@ -1,10 +1,10 @@
 import { Box, useColorMode } from "@chakra-ui/react";
 import SideBar from "@components/SideBar";
-import { useSignalRConnection } from "@hooks/singalr";
 import { useState, MouseEvent } from "react";
 import { Outlet } from "react-router-dom";
 import chatBgDark from "@assets/chat-bg-dark.jpg";
 import chatBgLight from "@assets/chat-bg-light.jpg";
+import { useSignalRConnection } from "@hooks/singalr";
 
 const MIN_SIDEBAR_WIDTH = 300;
 const MAX_SIDEBAR_WIDTH = 700;
@@ -15,7 +15,7 @@ export default function Layout() {
 
   const { colorMode } = useColorMode();
 
-  useSignalRConnection();
+  const { isLoading } = useSignalRConnection();
 
   function handleMouseMove(event: MouseEvent) {
     if (dragActive) {
@@ -47,8 +47,8 @@ export default function Layout() {
       onMouseUp={handleMouseUp}
       onMouseMove={handleMouseMove}
     >
-      <Box w={sidebarWidth}>
-        <SideBar />
+      <Box id="LeftColumn" w={sidebarWidth}>
+        {!isLoading && <SideBar />}
       </Box>
       <Box
         onMouseDown={handleMouseDown}
@@ -58,11 +58,13 @@ export default function Layout() {
         borderRightWidth={1}
       />
       <Box
+        id="RightColumn"
         flexGrow={1}
         bgImage={colorMode == "light" ? chatBgLight : chatBgDark}
         bgSize="cover"
+        width={window.innerWidth - sidebarWidth}
       >
-        <Outlet />
+        {!isLoading && <Outlet />}
       </Box>
     </Box>
   );

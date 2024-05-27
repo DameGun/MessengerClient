@@ -15,6 +15,7 @@ export default defineConfig({
       '@styles': path.resolve(__dirname, './src/styles'),
       '@components': path.resolve(__dirname, './src/components'),
       '@state': path.resolve(__dirname, './src/services/redux'),
+      '@signalr': path.resolve(__dirname, './src/services/signalr'),
       '@hooks': path.resolve(__dirname, './src/hooks'),
       '@helpers': path.resolve(__dirname, './src/helpers')
     }

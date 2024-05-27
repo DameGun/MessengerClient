@@ -2,6 +2,8 @@ import { HubConnection, HubConnectionBuilder, HubConnectionState, IHttpConnectio
 
 const API_URL = import.meta.env.VITE_API_URL_DEV;
 
+export let signalrConnection: HubConnection;
+
 const startSignalRConnection = async (connection: HubConnection) => {
     try {
         await connection.start();
@@ -27,7 +29,7 @@ export const getSignalRConnection = async (token: string) => {
 
     connection.onclose(error => {
         console.assert(connection.state === HubConnectionState.Disconnected);
-        if(error) {
+        if (error) {
             console.error('SignalR: connection was closed dut to error', error)
         }
         else {
@@ -47,5 +49,7 @@ export const getSignalRConnection = async (token: string) => {
 
     await startSignalRConnection(connection);
 
-    return connection;
+    signalrConnection = connection;
+
+    return signalrConnection;
 }

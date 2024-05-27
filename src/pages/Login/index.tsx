@@ -1,7 +1,7 @@
 import { Container, Box, FormControl, FormLabel, Heading, Input, FormErrorMessage, Button, Link as ChakraUiLink, Text, Alert, AlertIcon, AlertTitle, AlertDescription, useDisclosure, CloseButton } from "@chakra-ui/react";
 import { Login } from "@customTypes/authentication";
 import { isFetchBaseQueryError } from "@helpers/reduxUtils";
-import { useAppDispatch } from "@hooks/index";
+import { useAppDispatch } from "@hooks/redux";
 import { useLoginMutation } from "@services/redux/auth/authApiSlice";
 import { setCredentials } from "@services/redux/auth/authSlice";
 import { Field, Form, Formik, FormikHelpers } from "formik";

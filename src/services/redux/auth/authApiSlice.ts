@@ -1,5 +1,5 @@
 import { Login, Register, Tokens } from "@customTypes/authentication";
-import { apiSlice } from "@services/api";
+import { apiSlice } from "@state/api";
 
 export const authApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({

@@ -1,12 +1,20 @@
-import { useAppSelector } from ".";
+import { useAppSelector } from "./redux";
 import { selectCurrentToken } from "@services/redux/auth/authSlice";
-import { useEffect } from "react";
-import { getSignalRConnection } from "@services/signalr";
+import { getSignalRConnection } from "@services/signalr/hub";
+import { useEffect, useState } from "react";
 
-export const useSignalRConnection = () => {
-    const token = useAppSelector(selectCurrentToken) || '';
+export function useSignalRConnection() {
+    const token = useAppSelector(selectCurrentToken)!;
+    const [isLoading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        getSignalRConnection(token)
+        async function mount() {
+            await getSignalRConnection(token);
+            setLoading(false);
+        }
+
+        mount();
     }, [])
+
+    return { isLoading }
 }

@@ -1,8 +1,8 @@
 import { Box } from "@chakra-ui/react";
 import ChatButton from "@components/ChatButton";
-import EmptyList from "@components/EmptyList";
+import InfoCaption from "@components/InfoCaption";
 import { Chat } from "@customTypes/chat";
-import { useAppDispatch, useAppSelector } from "@hooks/index";
+import { useAppDispatch, useAppSelector } from "@hooks/redux";
 import {
   recoverCurrentChat,
   selectCurrentChat,
@@ -14,16 +14,12 @@ import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 export default function ChatsList() {
-  const userId = useAppSelector(selectCurrentUserId);
+  const userId = useAppSelector(selectCurrentUserId)!;
   const currentChat = useAppSelector(selectCurrentChat);
   const dispatch = useAppDispatch();
 
-  const {
-    data = [],
-    isError,
-    isSuccess,
-    refetch,
-  } = useGetUserChatsQuery(userId || "");
+  const { data, isLoading, isError, isUninitialized, isSuccess } =
+    useGetUserChatsQuery(userId);
 
   const navigate = useNavigate();
   const { chatId } = useParams();
@@ -34,33 +30,42 @@ export default function ChatsList() {
     }
   }, [data]);
 
-  if (isError) {
-    return <EmptyList caption="Error happened" reloadFunc={refetch} />;
-  }
-
   function onChatClick(chat: Chat) {
     dispatch(setCurrentChat(chat));
-    navigate(`/chat/${chat.Id}`);
+    navigate(`/c/${chat.Id}`);
   }
 
-  return data.length > 0 ? (
+  const renderComponent = () => {
+    if (!isUninitialized) {
+      if (!isLoading) {
+        if (isError) {
+          return <InfoCaption caption="Error happened" />;
+        } else if (data.length > 0) {
+          return data.map((chat) => (
+            <ChatButton
+              key={chat.Id}
+              chatItem={chat}
+              variant={currentChat?.Id == chat.Id ? "selected" : ""}
+              onClick={() => onChatClick(chat)}
+            />
+          ));
+        } else {
+          <InfoCaption caption="No chats..." />;
+        }
+      }
+    }
+  };
+
+  return (
     <Box
       mt={5}
       display="flex"
       flexDirection="column"
       alignItems="stretch"
       gap={2}
+      flex={1}
     >
-      {data?.map((chat) => (
-        <ChatButton
-          key={chat.Id}
-          chatItem={chat}
-          variant={currentChat?.Id == chat.Id ? "selected" : ""}
-          onClick={() => onChatClick(chat)}
-        />
-      ))}
+      {renderComponent()}
     </Box>
-  ) : (
-    <EmptyList caption="No chats..." reloadFunc={null} />
   );
 }
