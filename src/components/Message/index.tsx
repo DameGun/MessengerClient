@@ -1,14 +1,12 @@
 import {
   Box,
   Container,
-  MenuItem,
   Text,
   useStyleConfig,
 } from "@chakra-ui/react";
-import ContextMenu from "@components/ContextMenu";
+import ContextMenu, { ContextMenuTriggerProps } from "@components/ContextMenu";
 import { ChatMessage } from "@customTypes/chatMessage";
-import { useState } from "react";
-import { HiOutlineTrash } from "react-icons/hi";
+import MessageContextMenuActions from "./MessageContextMenuActions";
 
 interface MessageProps {
   messageItem: ChatMessage;
@@ -17,13 +15,15 @@ interface MessageProps {
 
 export default function Message(props: MessageProps) {
   const styles = useStyleConfig("Message");
-  const [isContextOpen, setIsContextOpen] = useState(false);
 
-  const MessageOverlay = () => (
+  const MessageOverlay = (overlayProps: ContextMenuTriggerProps) => (
     <Box
       display="flex"
-      backgroundColor={isContextOpen ? "RGBA(255, 255, 255, 0.08)" : undefined}
+      backgroundColor={
+        overlayProps.isContextFocus ? "RGBA(255, 255, 255, 0.08)" : undefined
+      }
       py={1}
+      onContextMenu={overlayProps.onContextMenu}
     >
       <Container
         maxW="container.sm"
@@ -48,13 +48,8 @@ export default function Message(props: MessageProps) {
   );
 
   return (
-    <ContextMenu
-      TriggerComponent={<MessageOverlay />}
-      setContextFocus={setIsContextOpen}
-    >
-      <MenuItem color="red.600" icon={<HiOutlineTrash size={20} />}>
-        Delete message
-      </MenuItem>
+    <ContextMenu TriggerComponent={<MessageOverlay />}>
+      <MessageContextMenuActions messageItem={props.messageItem} />
     </ContextMenu>
   );
 }

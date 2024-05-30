@@ -1,4 +1,4 @@
-import { Container, Box, FormControl, FormLabel, Heading, Input, FormErrorMessage, Button, Link as ChakraUiLink, Text, Alert, AlertIcon, AlertTitle, AlertDescription, useDisclosure, CloseButton } from "@chakra-ui/react";
+import { Container, Box, FormControl, FormLabel, Heading, Input, FormErrorMessage, Button, Link as ChakraUiLink, Text, Alert, AlertIcon, AlertTitle, useDisclosure, CloseButton } from "@chakra-ui/react";
 import { Login } from "@customTypes/authentication";
 import { isFetchBaseQueryError } from "@helpers/reduxUtils";
 import { useAppDispatch } from "@hooks/redux";
@@ -38,7 +38,7 @@ export default function LoginPage() {
         try {
             const tokens = await login(values).unwrap();
             dispatch(setCredentials({ ...tokens }));
-            navigate('/');
+            navigate('/', { replace: true });
         }
         catch (err) {
             if (isFetchBaseQueryError(err)) {

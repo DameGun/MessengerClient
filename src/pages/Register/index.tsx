@@ -39,7 +39,7 @@ export default function RegisterPage() {
         try {
             const tokens = await register(values).unwrap();
             dispatch(setCredentials({ ...tokens }));
-            navigate('/');
+            navigate('/', { replace: true });
         }
         catch (err) {
             console.log(err);

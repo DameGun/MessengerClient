@@ -3,10 +3,7 @@ type Login = {
     password: string
 }
 
-type Register = {
-    email: string,
-    password: string
-}
+type Register = Login
 
 type Tokens = {
     accessToken: string,

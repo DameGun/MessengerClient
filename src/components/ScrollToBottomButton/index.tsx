@@ -41,8 +41,8 @@ export default function ScrollToBottomButton(props: ScrollToBottomButtonProps) {
         aria-label="scrollToBottom"
         isRound
         __css={styles}
-        icon={<HiArrowDown size={30} />}
-        onClick={() => scrollToEndInChat(props.scrollableRef, true)}
+        icon={<HiArrowDown size={25} />}
+        onClick={() => scrollToEndInChat(props.scrollableRef.current!.id, true)}
         transition='0.2s'
       />
     )

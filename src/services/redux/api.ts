@@ -2,6 +2,8 @@ import { BaseQueryApi, createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/
 import { RootState } from '@state/store';
 import { logout, setCredentials } from '@services/redux/auth/authSlice';
 import { getCookie } from '@helpers/cookies';
+import { ParsePaginationHeaders } from '@helpers/typeCasters';
+import { ResponseWithPagination } from '@customTypes/common';
 
 const API_VERSION = import.meta.env.VITE_API_VERSION;
 const API_URL = import.meta.env.VITE_API_URL_DEV;
@@ -22,7 +24,7 @@ const baseQuery = fetchBaseQuery({
 /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 const baseQueryWithReauth = async (args: any, api: BaseQueryApi, extraOptions: object) => {
     let result = await baseQuery(args, api, extraOptions);
-    
+
     if (result.error && result.error.status == 401) {
         const refreshToken = getCookie('refreshToken');
 
@@ -46,12 +48,18 @@ const baseQueryWithReauth = async (args: any, api: BaseQueryApi, extraOptions: o
         }
     }
 
+    const paginationHeaders = ParsePaginationHeaders(result.meta);
+    if (paginationHeaders) {
+        result.data = {
+            items: result.data,
+            pagination: paginationHeaders
+        } as ResponseWithPagination<unknown>
+    }
     return result
 }
 
 export const apiSlice = createApi({
     baseQuery: baseQueryWithReauth,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    tagTypes: ['Messages'],
     endpoints: (builder) => ({})
 })

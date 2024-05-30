@@ -3,11 +3,11 @@ import InfiniteScroll from "@components/InfiniteScroll";
 import InfoCaption from "@components/InfoCaption";
 import Message from "@components/Message";
 import ScrollToBottomButton from "@components/ScrollToBottomButton";
-import { MessagesQueryArgument } from "@customTypes/chatMessage";
+import { QueryArgumentsWithPagination } from "@customTypes/common";
 import { useAppSelector } from "@hooks/redux";
 import { selectCurrentUserId } from "@services/redux/auth/authSlice";
 import { useGetChatMessagesQuery } from "@services/redux/messages/messagesApiSlice";
-import { Fragment, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 
 interface MessagesListProps {
   currentChatId: string;
@@ -18,16 +18,23 @@ export default function MessagesList(props: MessagesListProps) {
   const innerScrollable = useRef<HTMLDivElement>(null);
 
   const { data, isSuccess, isFetching } = useGetChatMessagesQuery({
-    chatId: props.currentChatId,
+    id: props.currentChatId,
     page,
     pageSize: 20,
-  } as MessagesQueryArgument);
+  } as QueryArgumentsWithPagination);
 
   const userId = useAppSelector(selectCurrentUserId)!;
 
+  useEffect(() => {
+    setPage(data?.pagination.CurrentPage || 1);
+  }, [props]);
+
+  useEffect(() => {
+    console.log(props.currentChatId, page);
+  }, [page]);
+
   return (
     <Box
-      id="scrollableChat"
       w="100%"
       overflow="auto"
       h="100vh"
@@ -35,9 +42,10 @@ export default function MessagesList(props: MessagesListProps) {
       flexDirection="column"
     >
       {isSuccess &&
-        (data.messages.length > 0 ? (
+        (data.items.length > 0 ? (
           <Fragment>
             <InfiniteScroll
+              id="scrollableChat"
               hasMore={data.pagination.HasNext}
               next={() => setPage((prev) => prev + 1)}
               isDataFetching={isFetching}
@@ -45,7 +53,7 @@ export default function MessagesList(props: MessagesListProps) {
               inverse={true}
               scrollableRef={innerScrollable}
             >
-              {data.messages.map((message) => (
+              {data.items.map((message) => (
                 <Message
                   key={message.id}
                   messageItem={message}
@@ -53,7 +61,9 @@ export default function MessagesList(props: MessagesListProps) {
                 />
               ))}
             </InfiniteScroll>
-            {innerScrollable.current && <ScrollToBottomButton scrollableRef={innerScrollable} /> }
+            {innerScrollable.current && (
+              <ScrollToBottomButton scrollableRef={innerScrollable} />
+            )}
           </Fragment>
         ) : (
           <InfoCaption caption="No messages here yet..." />

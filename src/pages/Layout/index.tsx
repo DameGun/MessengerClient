@@ -51,8 +51,8 @@ export default function Layout() {
         {!isLoading && <SideBar />}
       </Box>
       <Box
+        id="ColumnDivider"
         onMouseDown={handleMouseDown}
-        position="relative"
         cursor="ew-resize"
         width={2}
         borderRightWidth={1}

@@ -16,19 +16,11 @@ const chatsSlice = createSlice({
     reducers: {
         setCurrentChat: (state, action) => {
             state.currentChat = action.payload;
-        },
-        recoverCurrentChat: (state, action) => {
-            const { chatId, chats } = action.payload;
-            const chat = chats.find((chat: Chat) => chat.Id == chatId);
-
-            if (chat) {
-                state.currentChat = chat;
-            }
         }
     }
 })
 
-export const { setCurrentChat, recoverCurrentChat } = chatsSlice.actions;
+export const { setCurrentChat } = chatsSlice.actions;
 
 export const selectCurrentChat = (state: RootState) => state.chats.currentChat;
 

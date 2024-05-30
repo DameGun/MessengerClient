@@ -2,6 +2,7 @@ import { Box } from "@chakra-ui/react";
 import { ReactNode, RefObject, useCallback, useEffect, useRef } from "react";
 
 interface InfiniteScrollProps {
+  id: string;
   children: ReactNode;
   hasMore: boolean;
   page: number;
@@ -10,12 +11,13 @@ interface InfiniteScrollProps {
   inverse?: boolean;
   scrollableRef: RefObject<HTMLDivElement>;
   loader?: ReactNode;
+  spacing?: number;
 }
 
 export default function InfiniteScroll(props: InfiniteScrollProps) {
   const topElementRef = useRef<HTMLDivElement>(null);
 
-  const fetchMoreMessages = useCallback(() => {
+  const fetchMoreData = useCallback(() => {
     if (!props.isDataFetching && props.hasMore) {
       props.next();
     }
@@ -25,11 +27,11 @@ export default function InfiniteScroll(props: InfiniteScrollProps) {
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
-          fetchMoreMessages();
+          fetchMoreData();
         }
       },
       {
-        threshold: 1.0,
+        threshold: 0.1,
       }
     );
 
@@ -42,29 +44,28 @@ export default function InfiniteScroll(props: InfiniteScrollProps) {
         observer.unobserve(topElementRef.current);
       }
     };
-  }, [fetchMoreMessages]);
+  }, [fetchMoreData]);
 
   return (
     <Box
-      className="scrollableInner"
+      id={props.id}
       display="flex"
       ref={props.scrollableRef}
       flexDirection={props.inverse ? "column-reverse" : "column"}
-      overflow="auto"
-      sx={{
-        overflowAnchor: "none",
+      overflow="hidden"
+      _hover={{
+        overflowY: "scroll",
       }}
       flex="1 1 0%"
       position="sticky"
+      gap={props.spacing}
+      sx={{
+        scrollbarGutter: "stable",
+      }}
     >
-      {!props.inverse && (
-        <div ref={topElementRef} className="scrollableTrigger"></div>
-      )}
       {props.children}
-      {props.inverse && (
-        <div ref={topElementRef} className="scrollableTrigger"></div>
-      )}
-      {(props.isDataFetching && props.page !== 1) && props.loader}
+      <div ref={topElementRef} className="scrollableTrigger"/>
+      {props.isDataFetching && props.page !== 1 && props.loader}
     </Box>
   );
 }

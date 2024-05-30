@@ -3,6 +3,7 @@ import { defineStyleConfig } from "@chakra-ui/react";
 export const chatButtonStyle = defineStyleConfig({
     baseStyle: {
         borderRadius: 10,
+        mr: 1,
         minW: 150,
         _hover: {
             backgroundColor: 'gray.200'

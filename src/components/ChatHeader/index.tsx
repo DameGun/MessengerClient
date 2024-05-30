@@ -25,10 +25,10 @@ export default function ChatHeader(props: ChatHeaderProps) {
     <HStack __css={styles} justify="space-between">
       <HStack>
         <Avatar
-          name={props.currentChat.Name || ""}
-          src={props.currentChat.Image}
+          name={props.currentChat.name || ""}
+          src={props.currentChat.image}
         />
-        <Text as="b">{props.currentChat.Name}</Text>
+        <Text as="b">{props.currentChat.name}</Text>
       </HStack>
       <HStack>
         <Menu autoSelect={false}>

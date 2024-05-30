@@ -29,14 +29,12 @@ const theme = extendTheme({
                 minH: '100vh',
                 overflow: 'hidden'
             },
-            '::-webkit-scrollbar': {
-                width: '10px'
+            '&::-webkit-scrollbar': {
+                width: '5px',
             },
-            '::-webkit-scrollbar-track': {
-                bg: 'transparent'
-            },
-            '::-webkit-scrollbar-thumb': {
-                bg: props.colorMode === 'light' ? 'gray.400' : 'gray.800',
+            '&::-webkit-scrollbar-thumb': {
+                bg: props.colorMode === 'light' ? 'gray.200' : 'gray.700',
+                borderRadius: '5px'
             }
         })
     }

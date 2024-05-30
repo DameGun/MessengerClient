@@ -1,7 +1,5 @@
-import { RefObject } from "react";
-
-export function scrollToEndInChat(ref: RefObject<HTMLDivElement>, inverse: boolean) {
-    const scrollable = ref.current;
+export function scrollToEndInChat(refId: string, inverse: boolean) {
+    const scrollable = document.getElementById(refId);
 
     if (scrollable) {
         setTimeout(() => {

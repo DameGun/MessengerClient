@@ -1,4 +1,5 @@
-import { ChatMessage, MessagesPagination } from "@customTypes/chatMessage";
+import { ChatMessage } from "@customTypes/chatMessage";
+import { Pagination } from "@customTypes/common";
 import { FetchBaseQueryMeta } from "@reduxjs/toolkit/query";
 
 export function MapChatMessageWithDate(message: ChatMessage) {
@@ -12,7 +13,7 @@ export function MapChatMessageWithDate(message: ChatMessage) {
     } as ChatMessage
 }
 
-export function ParsePaginationHeaders(responseMeta: FetchBaseQueryMeta | undefined): MessagesPagination | undefined {
+export function ParsePaginationHeaders(responseMeta: FetchBaseQueryMeta | undefined): Pagination | undefined {
     const paginationHeaders = responseMeta?.response?.headers.get('X-Pagination');
 
     if (paginationHeaders) {

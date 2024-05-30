@@ -3,6 +3,7 @@ import { getCookie } from "@helpers/cookies";
 import { useAppDispatch, useAppSelector } from "@hooks/redux";
 import { useTokensRefreshMutation } from "@services/redux/auth/authApiSlice";
 import {
+  logout,
   selectCurrentToken,
   selectIsAuthorized,
   setCredentials,
@@ -27,8 +28,14 @@ export default function RequireAuth() {
       } else {
         const refreshToken = getCookie("refreshToken");
         if (refreshToken) {
-          const tokens = await refresh(refreshToken).unwrap();
-          dispatch(setCredentials(tokens));
+          try {
+            const tokens = await refresh(refreshToken).unwrap();
+            dispatch(setCredentials(tokens));
+          }
+          catch (err) {
+            console.error('Error occured while trying to refresh auth state:', err);
+            dispatch(logout());
+          }
         }
       }
     }

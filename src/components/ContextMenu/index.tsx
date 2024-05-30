@@ -1,28 +1,26 @@
 import {
   Box,
-  BoxProps,
   Menu,
   MenuList,
-  forwardRef,
+  Portal,
 } from "@chakra-ui/react";
-import { Fragment, MouseEvent, useEffect, useState } from "react";
+import { ReactElement, ReactNode, cloneElement } from "react";
+import { Fragment, MouseEvent, useState } from "react";
 
 interface ContextMenuProps {
-  TriggerComponent: React.ReactNode;
-  children: React.ReactNode;
-  isCursorLink?: boolean;
-  setContextFocus?: React.Dispatch<React.SetStateAction<boolean>>;
+  TriggerComponent: ReactElement;
+  children: ReactNode;
+}
+
+export interface ContextMenuTriggerProps {
+  onContextMenu?: (event: MouseEvent) => void;
+  isContextFocus?: boolean;
+  isLink?: boolean
 }
 
 export default function ContextMenu(props: ContextMenuProps) {
   const [openMenu, setOpenMenu] = useState(false);
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
-
-  useEffect(() => {
-    if (props.setContextFocus) {
-      props.setContextFocus(openMenu);
-    }
-  }, [openMenu]);
 
   const handleContextMenu = (event: MouseEvent) => {
     event.preventDefault();
@@ -31,45 +29,42 @@ export default function ContextMenu(props: ContextMenuProps) {
     setOpenMenu(!openMenu);
   };
 
-  const Trigger = forwardRef<BoxProps, "div">((boxProps, ref) => (
-    <Box
-      onContextMenu={handleContextMenu}
-      cursor={props.isCursorLink ? "pointer" : "default"}
-      ref={ref}
-      {...boxProps}
-    />
-  ));
+  const Trigger = cloneElement(props.TriggerComponent, {
+    onContextMenu: handleContextMenu,
+    isContextFocus: openMenu,
+  });
 
   return (
     <Fragment>
-      <Trigger>{props.TriggerComponent}</Trigger>
+      {Trigger}
       {openMenu && (
-        <Box
-          position="fixed"
-          top="0"
-          left="0"
-          width="100vw"
-          height="100vh"
-          onClick={handleContextMenu}
-          zIndex="900"
-        />
+        <Portal>
+          <Box
+            position="fixed"
+            top="0"
+            left="0"
+            width="100vw"
+            height="100vh"
+            onClick={handleContextMenu}
+            onContextMenu={handleContextMenu}
+            zIndex="900"
+          />
+          <Menu
+            isLazy
+            isOpen={openMenu}
+            autoSelect={false}
+          >
+            <MenuList
+              position="fixed"
+              top={menuPosition.y}
+              left={menuPosition.x}
+              zIndex={1000}
+            >
+              {props.children}
+            </MenuList>
+          </Menu>
+        </Portal>
       )}
-      <Menu
-        isLazy
-        isOpen={openMenu}
-        onClose={() => setOpenMenu(false)}
-        autoSelect={false}
-      >
-        <MenuList
-          transition="ease-in"
-          position="fixed"
-          top={menuPosition.y}
-          left={menuPosition.x}
-          zIndex={1000}
-        >
-          {props.children}
-        </MenuList>
-      </Menu>
     </Fragment>
   );
 }
