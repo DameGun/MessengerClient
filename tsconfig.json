@@ -19,7 +19,8 @@
       "@state/*": ["src/services/redux/*"],
       "@signalr/*": ["src/services/signalr/*"],
       "@hooks/*": ["src/hooks/*"],
-      "@helpers/*": ["src/helpers/*"]
+      "@helpers/*": ["src/helpers/*"],
+      "@constants/*": ["src/constants/*"]
     },
 
     /* Bundler mode */

@@ -6,29 +6,29 @@ import Layout from '@pages/Layout';
 import Chat from '@pages/Chat';
 
 export const router = createBrowserRouter([
-    {
-        path: '/',
-        element: <RequireAuth />,
+  {
+    path: '/',
+    element: <RequireAuth />,
+    children: [
+      {
+        path: '',
+        element: <Layout />,
         children: [
-            {
-                path: '',
-                element: <Layout />,
-                children: [
-                    {
-                        index: true,
-                        path: 'c/:chatId',
-                        element: <Chat/>
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        path: '/login',
-        element: <LoginPage />
-    },
-    {
-        path: '/register',
-        element: <RegisterPage />
-    }
-])
+          {
+            index: true,
+            path: 'c/:chatId',
+            element: <Chat />,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    path: '/login',
+    element: <LoginPage />,
+  },
+  {
+    path: '/register',
+    element: <RegisterPage />,
+  },
+]);

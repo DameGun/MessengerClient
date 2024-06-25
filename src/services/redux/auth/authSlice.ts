@@ -1,65 +1,65 @@
-import { jwtDecode } from "jwt-decode";
-import { createSlice } from "@reduxjs/toolkit";
-import { RootState } from "@state/store";
-import { DecodedToken } from "@customTypes/authentication";
-import { deleteCookie, setCookie } from "@helpers/cookies";
+import { jwtDecode } from 'jwt-decode';
+import { createSlice } from '@reduxjs/toolkit';
+import { RootState } from '@state/store';
+import { DecodedToken } from '@customTypes/authentication';
+import { deleteCookie, setCookie } from '@helpers/cookies';
 
 const TOKEN_AGE = import.meta.env.VITE_TOKEN_AGE;
 
 export interface AuthState {
-    userId: string | null,
-    token: string | null,
-    isAuthorized: boolean
+  userId: string | undefined;
+  token: string | undefined;
+  isAuthorized: boolean;
 }
 
 const initialState: AuthState = {
-    userId: null,
-    token: null,
-    isAuthorized: false
-}
+  userId: undefined,
+  token: undefined,
+  isAuthorized: false,
+};
 
 const authSlice = createSlice({
-    name: 'auth',
-    initialState,
-    reducers: {
-        setCredentials: (state, action) => {
-            const { accessToken, refreshToken } = action.payload;
-            const { userId } = jwtDecode<DecodedToken>(accessToken);
+  name: 'auth',
+  initialState,
+  reducers: {
+    setCredentials: (state, action) => {
+      const { accessToken, refreshToken } = action.payload;
+      const { userId } = jwtDecode<DecodedToken>(accessToken);
 
-            const oldUserId = localStorage.getItem('userId');
-            if (oldUserId !== userId) {
-                localStorage.setItem('userId', userId);
-            }
+      const oldUserId = localStorage.getItem('userId');
+      if (oldUserId !== userId) {
+        localStorage.setItem('userId', userId);
+      }
 
-            if(refreshToken) {
-                setCookie('refreshToken', refreshToken, {
-                    path: '/',
-                    secure: true,
-                    "max-age": TOKEN_AGE
-                })
-                setCookie('accessToken', accessToken, {
-                    path: '/',
-                    secure: true,
-                    "max-age": 60 * 5
-                })
-            }
+      if (refreshToken) {
+        setCookie('refreshToken', refreshToken, {
+          path: '/',
+          secure: true,
+          'max-age': TOKEN_AGE,
+        });
+        setCookie('accessToken', accessToken, {
+          path: '/',
+          secure: true,
+          'max-age': 60 * 5,
+        });
+      }
 
-            state.userId = userId;
-            state.token = accessToken;
-            state.isAuthorized = true;
-        },
-        logout: (state) => {
-            state.userId = null;
-            state.token = null;
-            state.isAuthorized = false;
+      state.userId = userId;
+      state.token = accessToken;
+      state.isAuthorized = true;
+    },
+    logout: (state) => {
+      state.userId = undefined;
+      state.token = undefined;
+      state.isAuthorized = false;
 
-            deleteCookie('refreshToken');
-            deleteCookie('accessToken');
+      deleteCookie('refreshToken');
+      deleteCookie('accessToken');
 
-            localStorage.removeItem('userId');
-        }
-    }
-})
+      localStorage.removeItem('userId');
+    },
+  },
+});
 
 export const { setCredentials, logout } = authSlice.actions;
 

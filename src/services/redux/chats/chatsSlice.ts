@@ -1,24 +1,24 @@
-import { Chat } from "@customTypes/chat";
-import { createSlice } from "@reduxjs/toolkit";
-import { RootState } from "@state/store";
+import { Chat } from '@customTypes/chat';
+import { createSlice } from '@reduxjs/toolkit';
+import { RootState } from '@state/store';
 
 export interface ChatsState {
-    currentChat: Chat | null,
+  currentChat: Chat | undefined;
 }
 
 const initialState: ChatsState = {
-    currentChat: null,
-}
+  currentChat: undefined,
+};
 
 const chatsSlice = createSlice({
-    name: 'chats',
-    initialState,
-    reducers: {
-        setCurrentChat: (state, action) => {
-            state.currentChat = action.payload;
-        }
-    }
-})
+  name: 'chats',
+  initialState,
+  reducers: {
+    setCurrentChat: (state, action) => {
+      state.currentChat = action.payload;
+    },
+  },
+});
 
 export const { setCurrentChat } = chatsSlice.actions;
 

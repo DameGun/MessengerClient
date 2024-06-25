@@ -1,6 +1,6 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import path from "node:path";
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import path from 'node:path';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -17,7 +17,8 @@ export default defineConfig({
       '@state': path.resolve(__dirname, './src/services/redux'),
       '@signalr': path.resolve(__dirname, './src/services/signalr'),
       '@hooks': path.resolve(__dirname, './src/hooks'),
-      '@helpers': path.resolve(__dirname, './src/helpers')
-    }
-  }
-})
+      '@helpers': path.resolve(__dirname, './src/helpers'),
+      '@constants': path.resolve(__dirname, './src/constants'),
+    },
+  },
+});

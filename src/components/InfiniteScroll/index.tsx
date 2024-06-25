@@ -1,10 +1,10 @@
-import { Box } from "@chakra-ui/react";
-import { ReactNode, RefObject, useCallback, useEffect, useRef } from "react";
+import { Box } from '@chakra-ui/react';
+import { ReactNode, RefObject, useCallback, useEffect, useRef } from 'react';
 
 interface InfiniteScrollProps {
   id: string;
   children: ReactNode;
-  hasMore: boolean;
+  hasMore: boolean | undefined;
   page: number;
   next: () => void;
   isDataFetching: boolean;
@@ -14,14 +14,25 @@ interface InfiniteScrollProps {
   spacing?: number;
 }
 
-export default function InfiniteScroll(props: InfiniteScrollProps) {
+export default function InfiniteScroll({
+  id,
+  children,
+  hasMore,
+  page,
+  next,
+  isDataFetching,
+  inverse,
+  scrollableRef,
+  loader,
+  spacing,
+}: InfiniteScrollProps) {
   const topElementRef = useRef<HTMLDivElement>(null);
 
   const fetchMoreData = useCallback(() => {
-    if (!props.isDataFetching && props.hasMore) {
-      props.next();
+    if (!isDataFetching && hasMore) {
+      next();
     }
-  }, [props.isDataFetching]);
+  }, [isDataFetching, hasMore, next]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -35,37 +46,39 @@ export default function InfiniteScroll(props: InfiniteScrollProps) {
       }
     );
 
-    if (topElementRef.current) {
-      observer.observe(topElementRef.current);
+    const elementRef = topElementRef.current;
+
+    if (elementRef) {
+      observer.observe(elementRef);
     }
 
     return () => {
-      if (topElementRef.current) {
-        observer.unobserve(topElementRef.current);
+      if (elementRef) {
+        observer.unobserve(elementRef);
       }
     };
   }, [fetchMoreData]);
 
   return (
     <Box
-      id={props.id}
-      display="flex"
-      ref={props.scrollableRef}
-      flexDirection={props.inverse ? "column-reverse" : "column"}
-      overflow="hidden"
+      id={id}
+      display='flex'
+      ref={scrollableRef}
+      flexDirection={inverse ? 'column-reverse' : 'column'}
+      overflow='hidden'
       _hover={{
-        overflowY: "scroll",
+        overflowY: 'scroll',
       }}
-      flex="1 1 0%"
-      position="sticky"
-      gap={props.spacing}
+      flex='1 1 0%'
+      position='sticky'
+      gap={spacing}
       sx={{
-        scrollbarGutter: "stable",
+        scrollbarGutter: 'stable',
       }}
     >
-      {props.children}
-      <div ref={topElementRef} className="scrollableTrigger"/>
-      {props.isDataFetching && props.page !== 1 && props.loader}
+      {children}
+      <div ref={topElementRef} className='scrollableTrigger' />
+      {isDataFetching && page !== 1 && loader}
     </Box>
   );
 }

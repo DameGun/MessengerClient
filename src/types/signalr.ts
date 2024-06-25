@@ -1,17 +1,14 @@
-import { ChatMessage } from "./chatMessage"
+import { ChatMessage } from '@customTypes/chatMessage';
 
 type ChatHubMessageParameters = {
-    id: string,
-    text: string,
-    image: string,
-    accountId: string,
-    connectionId: string,
-    chatId: string
-}
+  id: string;
+  text: string;
+  image: string;
+  accountId: string;
+  connectionId: string;
+  chatId: string;
+};
 
-type RecievedChatMessage = ChatMessage & { chatId: string }
+type RecievedChatMessage = ChatMessage & { chatId: string };
 
-export type {
-    ChatHubMessageParameters,
-    RecievedChatMessage
-}
+export type { ChatHubMessageParameters, RecievedChatMessage };

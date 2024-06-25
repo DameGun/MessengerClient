@@ -1,31 +1,31 @@
-import { ChatMessage } from "@customTypes/chatMessage";
-import { createSlice } from "@reduxjs/toolkit";
-import { RootState } from "@state/store";
+import { ChatMessage } from '@customTypes/chatMessage';
+import { createSlice } from '@reduxjs/toolkit';
+import { RootState } from '@state/store';
 
 interface MessagesState {
-    inputBarMode: 'COMMON' | 'EDIT',
-    editableMessage: ChatMessage | null
+  inputBarMode: 'COMMON' | 'EDIT';
+  editableMessage: ChatMessage | undefined;
 }
 
 const initialState: MessagesState = {
-    inputBarMode: 'COMMON',
-    editableMessage: null
-}
+  inputBarMode: 'COMMON',
+  editableMessage: undefined,
+};
 
 const messagesSlice = createSlice({
-    name: 'messages',
-    initialState,
-    reducers: {
-        setMessageEditMode: (state, action) => {
-            state.editableMessage = action.payload;
-            state.inputBarMode = 'EDIT';
-        },
-        resetMessageEditMode: (state) => {
-            state.editableMessage = null;
-            state.inputBarMode = 'COMMON';
-        }
-    }
-})
+  name: 'messages',
+  initialState,
+  reducers: {
+    setMessageEditMode: (state, action) => {
+      state.editableMessage = action.payload;
+      state.inputBarMode = 'EDIT';
+    },
+    resetMessageEditMode: (state) => {
+      state.editableMessage = undefined;
+      state.inputBarMode = 'COMMON';
+    },
+  },
+});
 
 export const { setMessageEditMode, resetMessageEditMode } = messagesSlice.actions;
 

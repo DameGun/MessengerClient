@@ -1,15 +1,15 @@
-import { Center, Spinner, Text } from "@chakra-ui/react";
-import { getCookie } from "@helpers/cookies";
-import { useAppDispatch, useAppSelector } from "@hooks/redux";
-import { useTokensRefreshMutation } from "@services/redux/auth/authApiSlice";
+import { Center, Spinner, Text } from '@chakra-ui/react';
+import { getCookie } from '@helpers/cookies';
+import { useAppDispatch, useAppSelector } from '@hooks/redux';
+import { useTokensRefreshMutation } from '@services/redux/auth/authApiSlice';
 import {
   logout,
   selectCurrentToken,
   selectIsAuthorized,
   setCredentials,
-} from "@services/redux/auth/authSlice";
-import { useEffect, useState } from "react";
-import { Navigate, Outlet } from "react-router-dom";
+} from '@services/redux/auth/authSlice';
+import { useEffect, useState } from 'react';
+import { Navigate, Outlet } from 'react-router-dom';
 
 export default function RequireAuth() {
   const token = useAppSelector(selectCurrentToken);
@@ -22,17 +22,16 @@ export default function RequireAuth() {
     setLoading(true);
 
     if (!token) {
-      const accessToken = getCookie("accessToken");
+      const accessToken = getCookie('accessToken');
       if (accessToken) {
         dispatch(setCredentials({ accessToken }));
       } else {
-        const refreshToken = getCookie("refreshToken");
+        const refreshToken = getCookie('refreshToken');
         if (refreshToken) {
           try {
             const tokens = await refresh(refreshToken).unwrap();
             dispatch(setCredentials(tokens));
-          }
-          catch (err) {
+          } catch (err) {
             console.error('Error occured while trying to refresh auth state:', err);
             dispatch(logout());
           }
@@ -47,16 +46,16 @@ export default function RequireAuth() {
     const id = setTimeout(() => appMount(), 500);
 
     return () => clearTimeout(id);
-  }, []);
+  });
 
   return loading ? (
-    <Center h="100vh" flexDirection="column" gap={10}>
-      <Spinner size="xl" speed="1s" />
-      <Text fontSize="xl">Loading... Please wait</Text>
+    <Center h='100vh' flexDirection='column' gap={10}>
+      <Spinner size='xl' speed='1s' />
+      <Text fontSize='xl'>Loading... Please wait</Text>
     </Center>
   ) : isAuthorized ? (
     <Outlet />
   ) : (
-    <Navigate to="/login" replace />
+    <Navigate to='/login' replace />
   );
 }

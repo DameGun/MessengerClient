@@ -9,57 +9,56 @@ const API_VERSION = import.meta.env.VITE_API_VERSION;
 const API_URL = import.meta.env.VITE_API_URL_DEV;
 
 const baseQuery = fetchBaseQuery({
-    baseUrl: `${API_URL}/api/v${API_VERSION}`,
-    credentials: 'include',
-    prepareHeaders: (headers, { getState }) => {
-        const state = getState() as RootState;
-        const token = state.auth.token;
-        if (token) {
-            headers.set("authorization", `Bearer ${token}`)
-        }
-        return headers;
+  baseUrl: `${API_URL}/api/v${API_VERSION}`,
+  credentials: 'include',
+  prepareHeaders: (headers, { getState }) => {
+    const state = getState() as RootState;
+    const token = state.auth.token;
+    if (token) {
+      headers.set('authorization', `Bearer ${token}`);
     }
-})
+    return headers;
+  },
+});
 
-/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 const baseQueryWithReauth = async (args: any, api: BaseQueryApi, extraOptions: object) => {
-    let result = await baseQuery(args, api, extraOptions);
+  let result = await baseQuery(args, api, extraOptions);
 
-    if (result.error && result.error.status == 401) {
-        const refreshToken = getCookie('refreshToken');
+  if (result.error && result.error.status == 401) {
+    const refreshToken = getCookie('refreshToken');
 
-        const fetchArgs = {
-            url: '/token/refresh',
-            method: 'POST',
-            headers: {
-                'Refresh-Token': refreshToken
-            }
-        }
+    const fetchArgs = {
+      url: '/token/refresh',
+      method: 'POST',
+      headers: {
+        'Refresh-Token': refreshToken,
+      },
+    };
 
-        const refreshResult = await baseQuery(fetchArgs, api, extraOptions);
+    const refreshResult = await baseQuery(fetchArgs, api, extraOptions);
 
-        if (refreshResult?.data) {
-            api.dispatch(setCredentials({ ...refreshResult.data }))
+    if (refreshResult?.data) {
+      api.dispatch(setCredentials({ ...refreshResult.data }));
 
-            result = await baseQuery(args, api, extraOptions);
-        }
-        else {
-            api.dispatch(logout())
-        }
+      result = await baseQuery(args, api, extraOptions);
+    } else {
+      api.dispatch(logout());
     }
+  }
 
-    const paginationHeaders = ParsePaginationHeaders(result.meta);
-    if (paginationHeaders) {
-        result.data = {
-            items: result.data,
-            pagination: paginationHeaders
-        } as ResponseWithPagination<unknown>
-    }
-    return result
-}
+  const paginationHeaders = ParsePaginationHeaders(result.meta);
+
+  if (paginationHeaders) {
+    result.data = {
+      items: result.data,
+      pagination: paginationHeaders,
+    } as ResponseWithPagination<unknown>;
+  }
+
+  return result;
+};
 
 export const apiSlice = createApi({
-    baseQuery: baseQueryWithReauth,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    endpoints: (builder) => ({})
-})
+  baseQuery: baseQueryWithReauth,
+  endpoints: () => ({}),
+});

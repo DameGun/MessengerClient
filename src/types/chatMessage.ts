@@ -1,18 +1,14 @@
 type ChatMessage = {
-    id: string,
-    text: string,
-    image: string,
-    publicationDate: string,
-    publicationTime: string,
-    accountId: string
-}
+  id: string;
+  text: string;
+  image: string;
+  publicationDate: string;
+  publicationTime: string;
+  accountId: string;
+};
 
-type ChatMessageCreate = Pick<ChatMessage, 'accountId' | 'text'>
+type ChatMessageCreate = Pick<ChatMessage, 'accountId' | 'text'>;
 
-type ChatMessageUpdate = Pick<ChatMessage, 'id' | 'text' | 'image'>
+type ChatMessageUpdate = Pick<ChatMessage, 'id' | 'text' | 'image'>;
 
-export type {
-    ChatMessage,
-    ChatMessageCreate,
-    ChatMessageUpdate
-}
+export type { ChatMessage, ChatMessageCreate, ChatMessageUpdate };

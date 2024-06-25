@@ -1,25 +1,20 @@
 type Login = {
-    email: string,
-    password: string
-}
+  email: string;
+  password: string;
+};
 
-type Register = Login
+type Register = Login;
 
 type Tokens = {
-    accessToken: string,
-    refreshToken: string
-}
+  accessToken: string;
+  refreshToken: string;
+};
 
 type DecodedToken = {
-    userEmail: string,
-    userRole: string,
-    userId: string,
-    exp: number
-}
+  userEmail: string;
+  userRole: string;
+  userId: string;
+  exp: number;
+};
 
-export type {
-    Login,
-    Register,
-    Tokens,
-    DecodedToken
-}
+export type { Login, Register, Tokens, DecodedToken };
