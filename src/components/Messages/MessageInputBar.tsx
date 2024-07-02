@@ -1,3 +1,7 @@
+import { HiCheck } from 'react-icons/hi';
+import { IoSend } from 'react-icons/io5';
+import { MdEdit } from 'react-icons/md';
+import { RxCross2 } from 'react-icons/rx';
 import { Container, Fade, HStack, Icon, IconButton, Input, Text, VStack } from '@chakra-ui/react';
 import { ChatMessageCreate, ChatMessageUpdate } from '@customTypes/chatMessage';
 import { scrollToEndInChat } from '@helpers/domHelpers';
@@ -13,10 +17,6 @@ import {
   selectCurrentInputBarMode,
 } from '@services/redux/messages/messagesSlice';
 import { useFormik } from 'formik';
-import { HiCheck } from 'react-icons/hi';
-import { IoSend } from 'react-icons/io5';
-import { MdEdit } from 'react-icons/md';
-import { RxCross2 } from 'react-icons/rx';
 
 export default function MessageInputBar() {
   const userId = useAppSelector(selectCurrentUserId)!;

@@ -1,3 +1,6 @@
+import { FiEdit } from 'react-icons/fi';
+import { HiOutlineTrash } from 'react-icons/hi';
+import { SlOptionsVertical } from 'react-icons/sl';
 import {
   Avatar,
   HStack,
@@ -10,9 +13,6 @@ import {
   useStyleConfig,
 } from '@chakra-ui/react';
 import { Chat } from '@customTypes/chat';
-import { FiEdit } from 'react-icons/fi';
-import { HiOutlineTrash } from 'react-icons/hi';
-import { SlOptionsVertical } from 'react-icons/sl';
 
 interface ChatHeaderProps {
   currentChat: Chat;

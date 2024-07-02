@@ -1,19 +1,21 @@
+import { useEffect, useState } from 'react';
+import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
 import {
-  Container,
-  Box,
-  FormControl,
-  FormLabel,
-  Heading,
-  Input,
-  FormErrorMessage,
-  Button,
-  Link as ChakraUiLink,
-  Text,
   Alert,
   AlertIcon,
   AlertTitle,
-  useDisclosure,
+  Box,
+  Button,
   CloseButton,
+  Container,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  Heading,
+  Input,
+  Link as ChakraUiLink,
+  Text,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { Login } from '@customTypes/authentication';
 import { isFetchBaseQueryError } from '@helpers/reduxUtils';
@@ -21,9 +23,7 @@ import { useAppDispatch } from '@hooks/redux';
 import { useLoginMutation } from '@services/redux/auth/authApiSlice';
 import { setCredentials } from '@services/redux/auth/authSlice';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
-import { useEffect, useState } from 'react';
-import { useNavigate, Link as ReactRouterLink } from 'react-router-dom';
-import * as yup from 'yup';
+import { LoginSchema } from './validation';
 
 export default function LoginPage() {
   const [login] = useLoginMutation();
@@ -38,15 +38,10 @@ export default function LoginPage() {
     password: '',
   };
 
-  const LoginSchema = yup.object({
-    email: yup.string().trim().email('Invalid email format').required('Email is required'),
-    password: yup.string().trim().required('Password required'),
-  });
-
   const handleSubmit = async (values: Login, { setSubmitting }: FormikHelpers<Login>) => {
     try {
       const tokens = await login(values).unwrap();
-      dispatch(setCredentials({ ...tokens }));
+      dispatch(setCredentials(tokens));
       navigate('/', { replace: true });
     } catch (err) {
       if (isFetchBaseQueryError(err)) {
@@ -101,7 +96,7 @@ export default function LoginPage() {
                 <FormErrorMessage>{errors.password}</FormErrorMessage>
               </FormControl>
               <Text fontSize={14} mt={2}>
-                Dont't have an account?{' '}
+                Dont&apos;t have an account?{' '}
                 <ChakraUiLink color='teal.500' as={ReactRouterLink} to='/register' replace>
                   Click here to sign up
                 </ChakraUiLink>

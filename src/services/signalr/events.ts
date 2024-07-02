@@ -11,10 +11,13 @@ export function sendMessageToChat(message: ChatMessage, connectionId: string, ch
 export function recieveMessageToChat(
   updateCachedDataCallback: (message: RecievedChatMessage) => void
 ) {
-  signalrConnection.on('ReceiveMessage', (accountId, text, image, chatId, id) => {
-    const receivedMessage = MapChatMessageWithDate({ accountId, text, image, id } as ChatMessage);
-    updateCachedDataCallback({ ...receivedMessage, chatId } as RecievedChatMessage);
-  });
+  signalrConnection.on(
+    'ReceiveMessage',
+    (accountId: string, text: string, image: string, chatId: string, id: string) => {
+      const receivedMessage = MapChatMessageWithDate({ accountId, text, image, id } as ChatMessage);
+      updateCachedDataCallback({ ...receivedMessage, chatId } as RecievedChatMessage);
+    }
+  );
 }
 
 export function deleteChatMessage(chatId: string, messageId: string, connectionId: string) {
@@ -25,7 +28,7 @@ export function deleteChatMessage(chatId: string, messageId: string, connectionI
 export function deleteChatMessageNotification(
   deleteChatMessageNotificationCallback: (chatId: string, messageId: string) => void
 ) {
-  signalrConnection.on('DeleteNotification', (chatId, messageId) => {
+  signalrConnection.on('DeleteNotification', (chatId: string, messageId: string) => {
     deleteChatMessageNotificationCallback(chatId, messageId);
   });
 }
@@ -42,8 +45,11 @@ export function editChatMessage(
 export function editChatMessageNotification(
   editChatMessageNotificationCallback: (message: ChatMessageUpdate, chatId: string) => void
 ) {
-  signalrConnection.on('EditNotification', (_, chatId, messageId, text, image) => {
-    const mappedMessage = { id: messageId, text, image } as ChatMessageUpdate;
-    editChatMessageNotificationCallback(mappedMessage, chatId);
-  });
+  signalrConnection.on(
+    'EditNotification',
+    (_, chatId: string, messageId: string, text: string, image: string) => {
+      const mappedMessage = { id: messageId, text, image } as ChatMessageUpdate;
+      editChatMessageNotificationCallback(mappedMessage, chatId);
+    }
+  );
 }

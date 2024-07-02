@@ -2,8 +2,8 @@ import { configureStore } from '@reduxjs/toolkit';
 import { apiSlice } from '@state/api';
 import authReducer from '@state/auth/authSlice';
 import chatsReducer from '@state/chats/chatsSlice';
-import messagesReducer from '@state/messages/messagesSlice';
 import domValuesReducer from '@state/domValues/domValuesSlice';
+import messagesReducer from '@state/messages/messagesSlice';
 
 export const store = configureStore({
   reducer: {

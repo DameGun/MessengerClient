@@ -19,7 +19,7 @@ export function ParsePaginationHeaders(
   const paginationHeaders = responseMeta?.response?.headers.get('X-Pagination');
 
   if (paginationHeaders) {
-    return JSON.parse(paginationHeaders, undefined);
+    return JSON.parse(paginationHeaders, undefined) as Pagination;
   } else {
     return undefined;
   }

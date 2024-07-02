@@ -1,6 +1,5 @@
-import { Fragment } from 'react';
-import { ButtonContainerMappingItem } from '.';
 import { Text } from '@chakra-ui/react';
+import { ButtonContainerMappingItem } from '../StyledButton';
 
 interface InfoRowProps {
   item: ButtonContainerMappingItem['info'];
@@ -8,7 +7,7 @@ interface InfoRowProps {
 
 export default function InfoRow({ item }: InfoRowProps) {
   return (
-    <Fragment>
+    <>
       {item!.lastMessage.isCurrentUserSender && (
         <Text fontSize={14} color='blue.600' isTruncated>
           You:
@@ -17,6 +16,6 @@ export default function InfoRow({ item }: InfoRowProps) {
       <Text fontSize={14} color='gray' isTruncated>
         {item!.lastMessage.text}
       </Text>
-    </Fragment>
+    </>
   );
 }

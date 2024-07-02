@@ -1,8 +1,8 @@
 import { ChatMessage, ChatMessageCreate, ChatMessageUpdate } from '@customTypes/chatMessage';
 import { QueryArgumentsWithPagination, ResponseWithPagination } from '@customTypes/common';
-import { HTTPArguments } from '@customTypes/redux';
 import { getBasicStateValues, queryFnWithParams } from '@helpers/reduxUtils';
 import { MapChatMessageWithDate } from '@helpers/typeCasters';
+import { FetchArgs } from '@reduxjs/toolkit/query';
 import { deleteChatMessage, editChatMessage, sendMessageToChat } from '@services/signalr/events';
 import { apiSlice } from '@state/api';
 import { RootState } from '@state/store';
@@ -44,13 +44,13 @@ export const messagesApiSlice = apiSlice.injectEndpoints({
     createChatMessage: builder.mutation<ChatMessage, ChatMessageCreate>({
       queryFn: (message, api, _, baseQuery) => {
         const { chatId } = getBasicStateValues(api.getState);
-        const fetchArgs: HTTPArguments = {
+        const fetchArgs: FetchArgs = {
           url: `/chats/${chatId}/messages`,
           method: 'POST',
           body: message,
         };
 
-        return queryFnWithParams<ChatMessage>(chatId, fetchArgs, baseQuery);
+        return queryFnWithParams<ChatMessage>(fetchArgs, baseQuery, chatId);
       },
       async onQueryStarted(_, { queryFulfilled, getState }) {
         try {
@@ -70,13 +70,13 @@ export const messagesApiSlice = apiSlice.injectEndpoints({
     updateChatMessage: builder.mutation<ChatMessage, Partial<ChatMessageUpdate>>({
       queryFn: (message, api, _, baseQuery) => {
         const { chatId } = getBasicStateValues(api.getState);
-        const fetchArgs: HTTPArguments = {
+        const fetchArgs: FetchArgs = {
           url: `/chats/${chatId}/messages/${message.id}`,
           method: 'PUT',
           body: message as Omit<ChatMessageUpdate, 'id'>,
         };
 
-        return queryFnWithParams<ChatMessage>(chatId, fetchArgs, baseQuery);
+        return queryFnWithParams<ChatMessage>(fetchArgs, baseQuery, chatId);
       },
       async onQueryStarted(requestObject, { queryFulfilled, getState }) {
         try {
@@ -95,12 +95,12 @@ export const messagesApiSlice = apiSlice.injectEndpoints({
     deleteChatMessage: builder.mutation<unknown, string>({
       queryFn: (messageId, api, _, baseQuery) => {
         const { chatId } = getBasicStateValues(api.getState);
-        const fetchArgs: HTTPArguments = {
+        const fetchArgs: FetchArgs = {
           url: `/chats/${chatId}/messages/${messageId}`,
           method: 'DELETE',
         };
 
-        return queryFnWithParams<ChatMessage>(chatId, fetchArgs, baseQuery);
+        return queryFnWithParams<ChatMessage>(fetchArgs, baseQuery, chatId);
       },
       async onQueryStarted(messageId, { queryFulfilled, getState }) {
         try {

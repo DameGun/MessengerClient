@@ -1,19 +1,21 @@
+import { useEffect, useState } from 'react';
+import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
 import {
-  Container,
-  Box,
-  FormControl,
-  FormLabel,
-  Heading,
-  Input,
-  FormErrorMessage,
-  Button,
-  Link as ChakraUiLink,
-  Text,
-  useDisclosure,
   Alert,
   AlertIcon,
   AlertTitle,
+  Box,
+  Button,
   CloseButton,
+  Container,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  Heading,
+  Input,
+  Link as ChakraUiLink,
+  Text,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { Register } from '@customTypes/authentication';
 import { isFetchBaseQueryError } from '@helpers/reduxUtils';
@@ -21,9 +23,7 @@ import { useAppDispatch } from '@hooks/redux';
 import { useRegisterMutation } from '@services/redux/auth/authApiSlice';
 import { setCredentials } from '@services/redux/auth/authSlice';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
-import { useEffect, useState } from 'react';
-import { useNavigate, Link as ReactRouterLink } from 'react-router-dom';
-import * as yup from 'yup';
+import { RegisterSchema } from './validation';
 
 export default function RegisterPage() {
   const [register] = useRegisterMutation();
@@ -38,19 +38,10 @@ export default function RegisterPage() {
     password: '',
   };
 
-  const RegisterSchema = yup.object({
-    email: yup.string().trim().email('Invalid email format').required('Email is required'),
-    password: yup
-      .string()
-      .trim()
-      .length(8, 'Password must be exactly 8 characters')
-      .required('Password required'),
-  });
-
   const handleSubmit = async (values: Register, { setSubmitting }: FormikHelpers<Register>) => {
     try {
       const tokens = await register(values).unwrap();
-      dispatch(setCredentials({ ...tokens }));
+      dispatch(setCredentials(tokens));
       navigate('/', { replace: true });
     } catch (err) {
       console.log(err);

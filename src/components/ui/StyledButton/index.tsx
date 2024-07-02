@@ -1,6 +1,6 @@
-import { Avatar, Box, HStack, Text, VStack, useStyleConfig } from '@chakra-ui/react';
-import { ContextMenuTriggerProps } from '@components/ContextMenu';
-import InfoRow from './InfoRow';
+import { Avatar, Box, HStack, Text, useStyleConfig, VStack } from '@chakra-ui/react';
+import { ContextMenuTriggerProps } from '@components/ui/ContextMenu';
+import InfoRow from '../InfoRow';
 
 interface ButtonContainerProps extends ContextMenuTriggerProps {
   variant?: string;
@@ -29,7 +29,7 @@ export default function ButtonContainer({
   isCursorLink,
   onContextMenu,
 }: ButtonContainerProps) {
-  const styles = useStyleConfig('ButtonContainer', { variant: variant });
+  const styles = useStyleConfig('StyledButton', { variant: variant });
   return (
     <Box __css={styles} onClick={() => onClick()}>
       <HStack p={2} cursor={isCursorLink ? 'pointer' : undefined} onContextMenu={onContextMenu}>

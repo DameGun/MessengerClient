@@ -1,11 +1,10 @@
-import { MenuItem } from '@chakra-ui/react';
+import { FiEdit } from 'react-icons/fi';
+import { HiOutlineTrash } from 'react-icons/hi';
+import ContextMenuItem from '@components/ui/ContextMenuItem';
 import { ChatMessage } from '@customTypes/chatMessage';
 import { useAppDispatch } from '@hooks/redux';
 import { useDeleteChatMessageMutation } from '@services/redux/messages/messagesApiSlice';
 import { setMessageEditMode } from '@services/redux/messages/messagesSlice';
-import { Fragment } from 'react';
-import { FiEdit } from 'react-icons/fi';
-import { HiOutlineTrash } from 'react-icons/hi';
 
 interface MessageContextMenuActionsProps {
   messageItem: ChatMessage;
@@ -15,21 +14,22 @@ export default function MessageContextMenuActions({ messageItem }: MessageContex
   const [deleteMessage] = useDeleteChatMessageMutation();
   const dispatch = useAppDispatch();
 
+  function onEdit() {
+    dispatch(setMessageEditMode(messageItem));
+  }
+
+  function onDelete() {
+    deleteMessage(messageItem.id);
+  }
+
   return (
-    <Fragment>
-      <MenuItem
-        icon={<FiEdit size={20} />}
-        onClick={() => dispatch(setMessageEditMode(messageItem))}
-      >
+    <>
+      <ContextMenuItem icon={<FiEdit size={20} />} onClick={onEdit}>
         Edit
-      </MenuItem>
-      <MenuItem
-        color='red.600'
-        icon={<HiOutlineTrash size={20} />}
-        onClick={() => deleteMessage(messageItem.id)}
-      >
+      </ContextMenuItem>
+      <ContextMenuItem color='red.500' icon={<HiOutlineTrash size={20} />} onClick={onDelete}>
         Delete
-      </MenuItem>
-    </Fragment>
+      </ContextMenuItem>
+    </>
   );
 }

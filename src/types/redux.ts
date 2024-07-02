@@ -1,24 +1,17 @@
-import { ThunkDispatch, UnknownAction } from '@reduxjs/toolkit';
 import { FetchBaseQueryMeta } from '@reduxjs/toolkit/query';
+import { AppDispatch } from '@services/redux/store';
 
-type HTTPMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
-
-type HTTPArguments = {
-  url: string;
-  method: HTTPMethod;
-  body?: object;
-  headers?: object;
-};
-
-type MutationQueryResponse<T> = {
+interface MutationQueryResponse<T> {
   data: T;
-  meta: FetchBaseQueryMeta | undefined;
-};
+  meta?: FetchBaseQueryMeta;
+}
 
-type RegisterSignalrEventsProps = {
-  dispatch: ThunkDispatch<any, any, UnknownAction>;
-  arg: any;
+interface RegisterSignalrEventsProps {
+  dispatch: AppDispatch;
+  arg: unknown;
   getState?: () => unknown;
-};
+}
 
-export type { HTTPArguments, HTTPMethod, MutationQueryResponse, RegisterSignalrEventsProps };
+type MutationCallbackProps = (draft: any) => void;
+
+export type { MutationQueryResponse, RegisterSignalrEventsProps, MutationCallbackProps };

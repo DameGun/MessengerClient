@@ -1,4 +1,5 @@
 import { ChatMessage } from '@customTypes/chatMessage';
+import { QueryArgumentsWithPagination } from '@customTypes/common';
 import { RegisterSignalrEventsProps } from '@customTypes/redux';
 import {
   deleteChatMessageNotification,
@@ -18,10 +19,12 @@ export default function RegisterMessagesSignalrEvents({
 
 function registerRecieveMessage({ dispatch, arg }: RegisterSignalrEventsProps) {
   try {
+    const parsedArgs = arg as QueryArgumentsWithPagination;
+
     recieveMessageToChat((message) => {
-      if (arg.id == message.chatId) {
+      if (parsedArgs.id == message.chatId) {
         dispatch(
-          messagesApiSlice.util.updateQueryData('getChatMessages', arg, (draft) => {
+          messagesApiSlice.util.updateQueryData('getChatMessages', parsedArgs, (draft) => {
             draft.items.unshift(message as ChatMessage);
           })
         );
@@ -34,10 +37,12 @@ function registerRecieveMessage({ dispatch, arg }: RegisterSignalrEventsProps) {
 
 function registerDeleteMessage({ dispatch, arg }: RegisterSignalrEventsProps) {
   try {
+    const parsedArgs = arg as QueryArgumentsWithPagination;
+
     deleteChatMessageNotification((chatId, messageId) => {
-      if (arg.id == chatId) {
+      if (parsedArgs.id == chatId) {
         dispatch(
-          messagesApiSlice.util.updateQueryData('getChatMessages', arg, (draft) => {
+          messagesApiSlice.util.updateQueryData('getChatMessages', parsedArgs, (draft) => {
             const index = draft.items.findIndex((message) => message.id == messageId);
             draft.items.splice(index, 1);
           })
@@ -51,10 +56,12 @@ function registerDeleteMessage({ dispatch, arg }: RegisterSignalrEventsProps) {
 
 function registerUpdateMessage({ dispatch, arg }: RegisterSignalrEventsProps) {
   try {
+    const parsedArgs = arg as QueryArgumentsWithPagination;
+
     editChatMessageNotification((updatedMessage, chatId) => {
-      if (arg.id == chatId) {
+      if (parsedArgs.id == chatId) {
         dispatch(
-          messagesApiSlice.util.updateQueryData('getChatMessages', arg, (draft) => {
+          messagesApiSlice.util.updateQueryData('getChatMessages', parsedArgs, (draft) => {
             const index = draft.items.findIndex((message) => message.id == updatedMessage.id);
 
             if (updatedMessage.text) draft.items[index].text = updatedMessage.text;

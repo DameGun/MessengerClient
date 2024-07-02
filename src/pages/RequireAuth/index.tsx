@@ -1,4 +1,7 @@
+import { useEffect, useState } from 'react';
+import { Navigate, Outlet } from 'react-router-dom';
 import { Center, Spinner, Text } from '@chakra-ui/react';
+import { Tokens } from '@customTypes/authentication';
 import { getCookie } from '@helpers/cookies';
 import { useAppDispatch, useAppSelector } from '@hooks/redux';
 import { useTokensRefreshMutation } from '@services/redux/auth/authApiSlice';
@@ -8,8 +11,6 @@ import {
   selectIsAuthorized,
   setCredentials,
 } from '@services/redux/auth/authSlice';
-import { useEffect, useState } from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
 
 export default function RequireAuth() {
   const token = useAppSelector(selectCurrentToken);
@@ -24,7 +25,7 @@ export default function RequireAuth() {
     if (!token) {
       const accessToken = getCookie('accessToken');
       if (accessToken) {
-        dispatch(setCredentials({ accessToken }));
+        dispatch(setCredentials({ accessToken } as Tokens));
       } else {
         const refreshToken = getCookie('refreshToken');
         if (refreshToken) {
@@ -43,7 +44,9 @@ export default function RequireAuth() {
   }
 
   useEffect(() => {
-    const id = setTimeout(() => appMount(), 500);
+    const id = setTimeout(() => {
+      appMount();
+    }, 500);
 
     return () => clearTimeout(id);
   });

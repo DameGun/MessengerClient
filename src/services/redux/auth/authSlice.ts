@@ -1,14 +1,14 @@
-import { jwtDecode } from 'jwt-decode';
-import { createSlice } from '@reduxjs/toolkit';
-import { RootState } from '@state/store';
-import { DecodedToken } from '@customTypes/authentication';
+import { DecodedToken, Tokens } from '@customTypes/authentication';
 import { deleteCookie, setCookie } from '@helpers/cookies';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from '@state/store';
+import { jwtDecode } from 'jwt-decode';
 
 const TOKEN_AGE = import.meta.env.VITE_TOKEN_AGE;
 
 export interface AuthState {
-  userId: string | undefined;
-  token: string | undefined;
+  userId?: string;
+  token?: string;
   isAuthorized: boolean;
 }
 
@@ -22,7 +22,7 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setCredentials: (state, action) => {
+    setCredentials: (state, action: PayloadAction<Tokens>) => {
       const { accessToken, refreshToken } = action.payload;
       const { userId } = jwtDecode<DecodedToken>(accessToken);
 

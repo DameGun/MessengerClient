@@ -1,6 +1,6 @@
-import { Box } from '@chakra-ui/react';
-import InfoCaption from '@components/InfoCaption';
 import { ReactNode } from 'react';
+import { Box } from '@chakra-ui/react';
+import InfoCaption from '@components/ui/InfoCaption';
 
 interface ListContainerProps {
   isUninitialized: boolean;

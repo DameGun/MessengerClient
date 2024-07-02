@@ -1,8 +1,8 @@
+import { ReactNode, RefObject, useEffect, useState } from 'react';
+import { IoMdArrowBack } from 'react-icons/io';
 import { Box, Fade, HStack, IconButton, Portal, Text, VStack } from '@chakra-ui/react';
 import { useAppSelector } from '@hooks/redux';
 import { selectSidebarWidth } from '@services/redux/domValues/domValuesSlice';
-import { ReactNode, RefObject, useEffect, useState } from 'react';
-import { IoMdArrowBack } from 'react-icons/io';
 
 interface CustomDrawerProps {
   children: ReactNode;
@@ -71,7 +71,7 @@ export default function CustomDrawer({
             top={0}
             left={placement == 'left' ? 0 : undefined}
             right={placement == 'right' ? 0 : undefined}
-            w={width || currentSidebarWidth}
+            w={width ?? currentSidebarWidth}
             h='100vh'
             display='flex'
             flexDirection='column'

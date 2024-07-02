@@ -1,7 +1,7 @@
 import { QueryArgumentsWithPagination, ResponseWithPagination } from '@customTypes/common';
 import { Contact } from '@customTypes/contacts';
-import { HTTPArguments } from '@customTypes/redux';
 import { getBasicStateValues, queryFnWithParams } from '@helpers/reduxUtils';
+import { FetchArgs } from '@reduxjs/toolkit/query';
 import { apiSlice } from '@state/api';
 
 export const contactsApiSlice = apiSlice.injectEndpoints({
@@ -9,12 +9,12 @@ export const contactsApiSlice = apiSlice.injectEndpoints({
     getContacts: builder.query<ResponseWithPagination<Contact[]>, QueryArgumentsWithPagination>({
       queryFn: ({ page, pageSize }, api, _, baseQuery) => {
         const { userId } = getBasicStateValues(api.getState);
-        const fetchArgs: HTTPArguments = {
+        const fetchArgs: FetchArgs = {
           url: `/accounts/${userId}/contacts?PageNumber=${page}&PageSize=${pageSize}`,
           method: 'GET',
         };
 
-        return queryFnWithParams<ResponseWithPagination<Contact[]>>(userId, fetchArgs, baseQuery);
+        return queryFnWithParams<ResponseWithPagination<Contact[]>>(fetchArgs, baseQuery, userId);
       },
       serializeQueryArgs: ({ endpointName }) => {
         return endpointName;

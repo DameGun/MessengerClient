@@ -1,10 +1,10 @@
-import ButtonContainer from '@components/ButtonContainer';
-import InfiniteScroll from '@components/InfiniteScroll';
-import ListContainer from '@components/ListContainer';
+import { useRef } from 'react';
+import InfiniteScroll from '@components/ui/InfiniteScroll';
+import ListContainer from '@components/ui/ListContainer';
+import ButtonContainer from '@components/ui/StyledButton';
 import { CONTACTS_PAGE_SIZE } from '@constants/index';
 import { QueryArgumentsWithPagination } from '@customTypes/common';
 import { useGetContactsQuery } from '@services/redux/contacts/contactsApiSlice';
-import { useRef } from 'react';
 
 export function ContactsList() {
   const { data, isUninitialized, isLoading, isError, isFetching } = useGetContactsQuery({

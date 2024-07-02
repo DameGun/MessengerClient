@@ -1,5 +1,5 @@
-import { Box } from '@chakra-ui/react';
 import { ReactNode, RefObject, useCallback, useEffect, useRef } from 'react';
+import { Box } from '@chakra-ui/react';
 
 interface InfiniteScrollProps {
   id: string;

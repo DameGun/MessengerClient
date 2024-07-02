@@ -1,13 +1,13 @@
 import { ChatMessage } from '@customTypes/chatMessage';
 
-type ChatHubMessageParameters = {
+interface ChatHubMessageParameters {
   id: string;
   text: string;
   image: string;
   accountId: string;
   connectionId: string;
   chatId: string;
-};
+}
 
 type RecievedChatMessage = ChatMessage & { chatId: string };
 

@@ -1,9 +1,10 @@
-import { BaseQueryApi, createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { RootState } from '@state/store';
-import { logout, setCredentials } from '@services/redux/auth/authSlice';
+import { Tokens } from '@customTypes/authentication';
+import { ResponseWithPagination } from '@customTypes/common';
 import { getCookie } from '@helpers/cookies';
 import { ParsePaginationHeaders } from '@helpers/typeCasters';
-import { ResponseWithPagination } from '@customTypes/common';
+import { BaseQueryApi, createApi, FetchArgs, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { logout, setCredentials } from '@services/redux/auth/authSlice';
+import { RootState } from '@state/store';
 
 const API_VERSION = import.meta.env.VITE_API_VERSION;
 const API_URL = import.meta.env.VITE_API_URL_DEV;
@@ -21,13 +22,17 @@ const baseQuery = fetchBaseQuery({
   },
 });
 
-const baseQueryWithReauth = async (args: any, api: BaseQueryApi, extraOptions: object) => {
+const baseQueryWithReauth = async (
+  args: string | FetchArgs,
+  api: BaseQueryApi,
+  extraOptions: object
+) => {
   let result = await baseQuery(args, api, extraOptions);
 
   if (result.error && result.error.status == 401) {
     const refreshToken = getCookie('refreshToken');
 
-    const fetchArgs = {
+    const fetchArgs: FetchArgs = {
       url: '/token/refresh',
       method: 'POST',
       headers: {
@@ -38,7 +43,7 @@ const baseQueryWithReauth = async (args: any, api: BaseQueryApi, extraOptions: o
     const refreshResult = await baseQuery(fetchArgs, api, extraOptions);
 
     if (refreshResult?.data) {
-      api.dispatch(setCredentials({ ...refreshResult.data }));
+      api.dispatch(setCredentials(refreshResult.data as Tokens));
 
       result = await baseQuery(args, api, extraOptions);
     } else {

@@ -1,13 +1,13 @@
+import { useRef, useState } from 'react';
 import ChatButton from '@components/Chats/ChatButton';
-import InfiniteScroll from '@components/InfiniteScroll';
-import ListContainer from '@components/ListContainer';
+import InfiniteScroll from '@components/ui/InfiniteScroll';
+import ListContainer from '@components/ui/ListContainer';
 import { CHATS_PAGE_SIZE } from '@constants/index';
 import { QueryArgumentsWithPagination } from '@customTypes/common';
 import { useAppSelector } from '@hooks/redux';
 import { selectCurrentChat } from '@services/redux/chats/chatsSlice';
 import { selectCurrentUserId } from '@state/auth/authSlice';
 import { useGetUserChatsQuery } from '@state/chats/chatsApiSlice';
-import { useRef, useState } from 'react';
 
 export default function ChatsList() {
   const userId = useAppSelector(selectCurrentUserId)!;

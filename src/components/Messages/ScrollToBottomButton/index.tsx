@@ -1,7 +1,7 @@
-import { IconButton, useStyleConfig } from '@chakra-ui/react';
-import { scrollToEndInChat } from '@helpers/domHelpers';
 import { RefObject, useCallback, useEffect, useState } from 'react';
 import { HiArrowDown } from 'react-icons/hi';
+import { IconButton, useStyleConfig } from '@chakra-ui/react';
+import { scrollToEndInChat } from '@helpers/domHelpers';
 
 interface ScrollToBottomButtonProps {
   scrollableRef: RefObject<HTMLDivElement>;

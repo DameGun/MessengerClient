@@ -1,6 +1,6 @@
 import { defineStyleConfig } from '@chakra-ui/react';
 
-export const buttonContainerStyle = defineStyleConfig({
+export const styledByttonStyles = defineStyleConfig({
   baseStyle: {
     borderRadius: 10,
     mr: 1,

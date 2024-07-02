@@ -1,14 +1,14 @@
+import { useEffect, useRef, useState } from 'react';
 import { Box } from '@chakra-ui/react';
-import InfiniteScroll from '@components/InfiniteScroll';
-import InfoCaption from '@components/InfoCaption';
-import Message from '@components/Messages/MessageItem';
-import ScrollToBottomButton from '@components/Messages/ScrollToBottomButton';
+import InfiniteScroll from '@components/ui/InfiniteScroll';
+import InfoCaption from '@components/ui/InfoCaption';
 import { MESSAGES_PAGE_SIZE } from '@constants/index';
 import { QueryArgumentsWithPagination } from '@customTypes/common';
 import { useAppSelector } from '@hooks/redux';
 import { selectCurrentUserId } from '@services/redux/auth/authSlice';
 import { useGetChatMessagesQuery } from '@services/redux/messages/messagesApiSlice';
-import { Fragment, useEffect, useRef, useState } from 'react';
+import Message from './MessageItem';
+import ScrollToBottomButton from './ScrollToBottomButton';
 
 interface MessagesListProps {
   currentChatId: string;
@@ -27,14 +27,14 @@ export default function MessagesList({ currentChatId }: MessagesListProps) {
   const userId = useAppSelector(selectCurrentUserId)!;
 
   useEffect(() => {
-    setPage(data?.pagination.CurrentPage || 1);
+    setPage(data?.pagination.CurrentPage ?? 1);
   }, [currentChatId, data]);
 
   return (
     <Box w='100%' overflow='auto' h='100vh' display='flex' flexDirection='column'>
       {isSuccess &&
         (data.items.length > 0 ? (
-          <Fragment>
+          <>
             <InfiniteScroll
               id='scrollableChat'
               hasMore={data.pagination.HasNext}
@@ -53,7 +53,7 @@ export default function MessagesList({ currentChatId }: MessagesListProps) {
               ))}
             </InfiniteScroll>
             {innerScrollable.current && <ScrollToBottomButton scrollableRef={innerScrollable} />}
-          </Fragment>
+          </>
         ) : (
           <InfoCaption caption='No messages here yet...' />
         ))}

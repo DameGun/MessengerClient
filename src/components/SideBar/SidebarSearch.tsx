@@ -1,3 +1,5 @@
+import { useRef } from 'react';
+import { HiOutlineSearch } from 'react-icons/hi';
 import {
   Input,
   InputGroup,
@@ -8,15 +10,13 @@ import {
   TabPanels,
   Tabs,
 } from '@chakra-ui/react';
-import CustomDrawer from '@components/CustomDrawer';
-import { Fragment, useRef } from 'react';
-import { HiOutlineSearch } from 'react-icons/hi';
+import CustomDrawer from '@components/ui/CustomDrawer';
 
 export default function SidebarSearch() {
   const inputRef = useRef<HTMLDivElement>(null);
 
   return (
-    <Fragment>
+    <>
       <InputGroup ref={inputRef}>
         <InputLeftElement>
           <HiOutlineSearch size={20} />
@@ -39,6 +39,6 @@ export default function SidebarSearch() {
           </TabPanels>
         </Tabs>
       </CustomDrawer>
-    </Fragment>
+    </>
   );
 }

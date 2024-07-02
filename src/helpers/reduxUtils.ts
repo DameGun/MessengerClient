@@ -1,5 +1,4 @@
-import { HTTPArguments } from '@customTypes/redux';
-import { FetchBaseQueryError, FetchBaseQueryMeta } from '@reduxjs/toolkit/query';
+import { FetchArgs, FetchBaseQueryError, FetchBaseQueryMeta } from '@reduxjs/toolkit/query';
 import { RootState } from '@state/store';
 import { QueryReturnValue } from 'node_modules/@reduxjs/toolkit/dist/query/baseQueryTypes';
 
@@ -12,7 +11,7 @@ export function isErrorWithMessage(error: unknown): error is { message: string }
     typeof error === 'object' &&
     error != null &&
     'message' in error &&
-    typeof (error as any).message === 'string'
+    typeof error.message === 'string'
   );
 }
 
@@ -24,14 +23,14 @@ export function getBasicStateValues(getState: () => unknown) {
   return { currentChat, userId, chatId: currentChat?.id };
 }
 
-export async function queryFnWithParams<T>(
-  queryParam: string | undefined,
-  fetchArgs: HTTPArguments,
+export async function queryFnWithParams<Data>(
+  fetchArgs: FetchArgs,
   baseQuery: (
     arg: any
-  ) => Promise<QueryReturnValue<unknown, FetchBaseQueryError, FetchBaseQueryMeta>>
-): Promise<QueryReturnValue<T, FetchBaseQueryError, FetchBaseQueryMeta | undefined>> {
-  if (!queryParam) {
+  ) => Promise<QueryReturnValue<unknown, FetchBaseQueryError, FetchBaseQueryMeta>>,
+  queryArgs?: string
+): Promise<QueryReturnValue<Data, FetchBaseQueryError, FetchBaseQueryMeta | undefined>> {
+  if (!queryArgs) {
     return {
       error: {
         data: 'INVALID REQUEST PARAMETERS',
@@ -41,7 +40,7 @@ export async function queryFnWithParams<T>(
   }
 
   const result = (await baseQuery(fetchArgs)) as QueryReturnValue<
-    T,
+    Data,
     FetchBaseQueryError,
     FetchBaseQueryMeta | undefined
   >;

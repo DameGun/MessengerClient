@@ -1,9 +1,9 @@
 import { createBrowserRouter } from 'react-router-dom';
-import LoginPage from '@pages/Login';
-import RequireAuth from '@pages/RequireAuth';
-import RegisterPage from '@pages/Register';
-import Layout from '@pages/Layout';
 import Chat from '@pages/Chat';
+import Layout from '@pages/Layout';
+import LoginPage from '@pages/Login';
+import RegisterPage from '@pages/Register';
+import RequireAuth from '@pages/RequireAuth';
 
 export const router = createBrowserRouter([
   {

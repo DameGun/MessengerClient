@@ -1,5 +1,5 @@
 import { DEFAULT_SIDEBAR_WIDTH } from '@constants/index';
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '@state/store';
 
 export interface DomValuesState {
@@ -14,7 +14,7 @@ const domValuesSlice = createSlice({
   name: 'domValues',
   initialState,
   reducers: {
-    setSidebarWidth: (state, action) => {
+    setSidebarWidth: (state, action: PayloadAction<number>) => {
       state.sidebarWidth = action.payload;
     },
   },

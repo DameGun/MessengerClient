@@ -1,3 +1,5 @@
+import { HiBars3, HiOutlineMoon } from 'react-icons/hi2';
+import { TbLogout2 } from 'react-icons/tb';
 import {
   Flex,
   HStack,
@@ -10,11 +12,9 @@ import {
   Text,
   useColorMode,
 } from '@chakra-ui/react';
-import { HiOutlineMoon, HiBars3 } from 'react-icons/hi2';
-import { TbLogout2 } from 'react-icons/tb';
+import ContactsMenuButton from '@components/Contacts/ContactsMenuButton';
 import { useAppDispatch } from '@hooks/redux';
 import { logout } from '@services/redux/auth/authSlice';
-import ContactsMenuButton from '@components/Contacts/ContactsMenuButton';
 import SidebarSearch from './SidebarSearch';
 
 export default function SidebarHeader() {

@@ -1,7 +1,7 @@
 import { Box, Container, SlideFade, Text, useStyleConfig } from '@chakra-ui/react';
-import ContextMenu, { ContextMenuTriggerProps } from '@components/ContextMenu';
+import ContextMenu, { ContextMenuTriggerProps } from '@components/ui/ContextMenu';
 import { ChatMessage } from '@customTypes/chatMessage';
-import MessageContextMenuActions from './MessageContextMenuActions';
+import MessageContextMenuActions from '../MessageContextMenuActions';
 
 interface MessageProps {
   messageItem: ChatMessage;

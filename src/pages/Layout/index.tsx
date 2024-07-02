@@ -1,12 +1,12 @@
-import { Box, useColorMode } from '@chakra-ui/react';
-import SideBar from '@components/SideBar/SidebarContainer';
-import { useState, MouseEvent } from 'react';
+import { MouseEvent, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import chatBgDark from '@assets/chat-bg-dark.jpg';
 import chatBgLight from '@assets/chat-bg-light.jpg';
-import { useSignalRConnection } from '@hooks/singalr';
-import { useAppDispatch, useAppSelector } from '@hooks/redux';
+import { Box, useColorMode } from '@chakra-ui/react';
+import SideBar from '@components/Sidebar/SibebarContainer';
 import { MAX_SIDEBAR_WIDTH, MIN_SIDEBAR_WIDTH } from '@constants/index';
+import { useAppDispatch, useAppSelector } from '@hooks/redux';
+import { useSignalRConnection } from '@hooks/singalr';
 import { selectSidebarWidth, setSidebarWidth } from '@state/domValues/domValuesSlice';
 
 export default function Layout() {
